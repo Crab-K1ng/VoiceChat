@@ -1,0 +1,36 @@
+{
+  "formatVersion": 1,
+  "id": "${mod_id}",
+  "version": "${mod_version}",
+  "name": "${mod_name}",
+  "description": "${description}",
+  "authors": [
+    "${mod_developer}"
+  ],
+  "meta": {
+    "icon": "${mod_id}:icons/icon.png"
+  },
+  "entrypoints": {
+    "client_init": [
+      "${group}.${mod_name}.ClientInitializer"
+    ],
+    "init": [
+      "${group}.${mod_name}.VoiceChat"
+    ],
+    "preInit": [
+      "${group}.${mod_name}.VoiceChatPreinit"
+    ]
+  },
+  "mixins": [
+    "${mod_id}.mixins.json",
+    {
+      "config": "${mod_id}.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "cosmic-reach": ">=${cosmic_reach_version}",
+    "puzzle-loader": ">=${puzzle_loader_version}"
+  },
+  "accessManipulator": "${mod_id}.manipulator"
+}
