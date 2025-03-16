@@ -27,5 +27,5 @@ buildscript() {
 include("puzzle")
 include("quilt")
 
-rootProject.name = 'VoiceChat'
+rootProject.name = 'Proximity'
 

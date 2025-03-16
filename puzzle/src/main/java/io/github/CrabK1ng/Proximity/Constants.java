@@ -1,4 +1,4 @@
-package io.github.CrabK1ng.VoiceChat;
+package io.github.CrabK1ng.Proximity;
 
 import finalforeach.cosmicreach.util.Identifier;
 import org.apache.logging.log4j.LogManager;

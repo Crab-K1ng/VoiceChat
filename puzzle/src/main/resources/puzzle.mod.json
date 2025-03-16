@@ -15,10 +15,10 @@
       "${group}.${mod_name}.ClientInitializer"
     ],
     "init": [
-      "${group}.${mod_name}.VoiceChat"
+      "${group}.${mod_name}.ProximityInit"
     ],
     "preInit": [
-      "${group}.${mod_name}.VoiceChatPreinit"
+      "${group}.${mod_name}.ProximityPreInit"
     ]
   },
   "mixins": [

@@ -1,20 +1,20 @@
-package io.github.CrabK1ng.VoiceChat.networking;
+package io.github.CrabK1ng.Proximity.networking;
 
 import com.badlogic.gdx.utils.ByteArray;
 import finalforeach.cosmicreach.networking.GamePacket;
 import finalforeach.cosmicreach.networking.NetworkIdentity;
 import finalforeach.cosmicreach.networking.server.ServerSingletons;
+import io.github.CrabK1ng.Proximity.Proximity;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.github.CrabK1ng.VoiceChat.VoiceChat;
 
-public class VoiceChatPacket extends GamePacket {
+public class ProximityPacket extends GamePacket {
 
     byte[] buffer;
 
-    public VoiceChatPacket(){};
+    public ProximityPacket(){};
 
-    public VoiceChatPacket(byte[] buffer) {
+    public ProximityPacket(byte[] buffer) {
         this.buffer = buffer;
     }
 
@@ -39,13 +39,13 @@ public class VoiceChatPacket extends GamePacket {
     public void handle(NetworkIdentity identity, ChannelHandlerContext ctx) {
         if (!identity.isServer()) {
             if (!(buffer == null)){
-                VoiceChat.speakers.write(buffer, 0, buffer.length);
+                Proximity.speakers.write(buffer, 0, buffer.length);
             }
         }
         if (identity.isServer()){
             if (!(buffer == null)){
-                VoiceChatPacket VoiceChatPacket = new VoiceChatPacket(buffer.clone());
-                ServerSingletons.SERVER.broadcastToAll(VoiceChatPacket);
+                ProximityPacket ProximityPacket = new ProximityPacket(buffer.clone());
+                ServerSingletons.SERVER.broadcastToAll(ProximityPacket);
             }
         }
 

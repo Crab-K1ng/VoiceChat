@@ -1,16 +1,16 @@
-package io.github.CrabK1ng.VoiceChat;
+package io.github.CrabK1ng.Proximity;
 
 import com.badlogic.gdx.utils.PauseableThread;
 import dev.crmodders.cosmicquilt.api.entrypoint.ModInitializer;
 import finalforeach.cosmicreach.Threads;
 import finalforeach.cosmicreach.networking.GamePacket;
 //import finalforeach.cosmicreach.networking.client.ClientNetworkManager;
-import io.github.CrabK1ng.VoiceChat.networking.VoiceChatPacket;
+import io.github.CrabK1ng.Proximity.networking.VoiceChatPacket;
 import org.quiltmc.loader.api.ModContainer;
 
 import javax.sound.sampled.*;
 
-import static io.github.CrabK1ng.VoiceChat.Constants.LOGGER;
+import static io.github.CrabK1ng.Proximity.Constants.LOGGER;
 
 public class VoiceChat implements ModInitializer {
 	public static SourceDataLine speakers;

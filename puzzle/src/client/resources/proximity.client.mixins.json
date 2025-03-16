@@ -1,12 +1,14 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "io.github.CrabK1ng.VoiceChat.mixins",
+  "package": "io.github.CrabK1ng.Proximity.mixins",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
   ],
   "client": [
-    "InGameMixin"
+    "InGameMixin",
+    "KeybindingMenuMixin",
+    "UIMixin"
   ],
   "injectors": {
     "defaultRequire": 1

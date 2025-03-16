@@ -1,10 +1,10 @@
-package io.github.CrabK1ng.VoiceChat.networking;
+package io.github.CrabK1ng.Proximity.networking;
 
 import com.badlogic.gdx.utils.ByteArray;
 import finalforeach.cosmicreach.networking.GamePacket;
 import finalforeach.cosmicreach.networking.NetworkIdentity;
 import finalforeach.cosmicreach.networking.server.ServerSingletons;
-import io.github.CrabK1ng.VoiceChat.VoiceChat;
+import io.github.CrabK1ng.Proximity.VoiceChat;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
