@@ -1,6 +1,7 @@
 package io.github.CrabK1ng.Proximity.mixins;
 
 import finalforeach.cosmicreach.gamestates.GameState;
+import finalforeach.cosmicreach.gamestates.InGame;
 import finalforeach.cosmicreach.gamestates.KeybindsMenu;
 import finalforeach.cosmicreach.settings.Keybind;
 import io.github.CrabK1ng.Proximity.ProximityControls;
@@ -15,7 +16,7 @@ public abstract class KeybindingMenuMixin {
     @Shadow protected abstract void addKeybindButton(String label, Keybind keybind);
 
     @Inject(method = "<init>(Lfinalforeach/cosmicreach/gamestates/GameState;)V", at = @At("TAIL"))
-    private void addZoomButton(GameState previousState, CallbackInfo ci) {
+    private void addKeybinds(GameState previousState, CallbackInfo ci) {
         this.addKeybindButton("Mute", ProximityControls.toggleMute);
         this.addKeybindButton("Open Voice Menu", ProximityControls.openVoiceMenu);
     }

@@ -8,12 +8,19 @@ import javax.sound.sampled.*;
 public class Proximity {
     public static SourceDataLine speakers;
     public static TargetDataLine microphone;
+    
     public static boolean lineOpen = true;
     //spicy or lemon lol prefer spicy tho ok spicy ++ <- thats my thumbs up ++ lol // check out the mic icon lol // i thought final added a way for the client to know if the server is modded i dont't know // i dont have a mail ..., so i can report him to the police, his fingerprints will be all over the bomb lol // have you seen the mic on and off icons resources.assets.proximity can't loaded it, uh weird
-    public static void toggleMic() {
-        lineOpen = !lineOpen;
+    public static void toggleMic() {lineOpen = !lineOpen;}
+    
+    public static boolean menuOpen = false;
+     public static void toggleMenu() {
+        menuOpen = !menuOpen;
     }
-
+    
+    public static boolean drawIcon = true;
+    public static void toggleIcon() {drawIcon = !drawIcon;}
+    
     public static void initText() {
         Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
         Gdx.gl.glBindTexture(GL20.GL_TEXTURE_2D, 0);

@@ -6,7 +6,7 @@
   "mixins": [
   ],
   "client": [
-    "InGameMixin",
+    "GameStateMixin",
     "KeybindingMenuMixin",
     "UIMixin"
   ],

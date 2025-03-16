@@ -4,6 +4,7 @@ import com.badlogic.gdx.utils.PauseableThread;
 import com.github.puzzle.core.loader.launch.provider.mod.entrypoint.impls.ClientModInitializer;
 import finalforeach.cosmicreach.GameSingletons;
 import finalforeach.cosmicreach.Threads;
+import finalforeach.cosmicreach.gamestates.InGame;
 import finalforeach.cosmicreach.networking.client.ClientNetworkManager;
 import io.github.CrabK1ng.Proximity.networking.ProximityPacket;
 
