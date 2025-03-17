@@ -8,7 +8,7 @@ public class ProximityInit implements ModInitializer {
 
     @Override
     public void onInit() {
-        Constants.LOGGER.info("Hello From INIT");
+        Constants.LOGGER.info("Proximity init");
         GamePacket.registerPacket(ProximityPacket.class);
     }
 }

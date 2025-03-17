@@ -7,6 +7,7 @@ import finalforeach.cosmicreach.Threads;
 import finalforeach.cosmicreach.gamestates.InGame;
 import finalforeach.cosmicreach.networking.client.ClientNetworkManager;
 import io.github.CrabK1ng.Proximity.networking.ProximityPacket;
+import io.github.CrabK1ng.Proximity.opus.OpusCodec;
 
 import static io.github.CrabK1ng.Proximity.Proximity.microphone;
 
@@ -19,20 +20,23 @@ public class ClientInitializer implements ClientModInitializer {
            Proximity.openMicrophone();
            Proximity.openSpeaker();
         }
-
     }
 
     public static void captureAudio() {
-        if (ClientNetworkManager.isConnected() && Proximity.lineOpen) {
+        if (ClientNetworkManager.isConnected()) {
+            OpusCodec codec = OpusCodec.createDefault();
             PauseableThread AudioCapture = Threads.createPauseableThread("AudioCaptureThread", () -> {
                 try {
-                    byte[] buffer = new byte[1024];
-                    while (true) {
-                        int bytesRead = microphone.read(buffer, 0, buffer.length);
-                        if (bytesRead > 0) {
-                            ProximityPacket ProximityPacket = new ProximityPacket(buffer.clone());
+                    while (Proximity.lineOpen) {
+                        byte[] buffer = new byte[codec.getChannels() * codec.getFrameSize() * 2];
+                        microphone.read(buffer, 0, buffer.length);
+                        byte[] encoded = codec.encodeFrame(buffer);
+                        byte[] decoded = codec.decodeFrame(encoded);
+                        Proximity.speakers.write(decoded, 0, buffer.length);
+                        //if (encoded.length > 0) {
+                            ProximityPacket ProximityPacket = new ProximityPacket(encoded.clone(),InGame.getLocalPlayer().getPosition(),InGame.getLocalPlayer().getUsername());
                             ClientNetworkManager.sendAsClient(ProximityPacket);
-                        }
+                        //}
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -56,7 +56,7 @@ public abstract class UIMixin {
             Proximity.toggleMic();
         }
         if (openVoiceMenu.isJustPressed()) {
-            Proximity.toggleMenu();
+            //Proximity.toggleMenu();
         }
         if (Proximity.menuOpen && !(currentGameState instanceof VoiceMenu)) {
             if (InGame.getLocalPlayer() != null) {
