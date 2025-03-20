@@ -5,12 +5,11 @@ import com.badlogic.gdx.utils.ByteArray;
 import finalforeach.cosmicreach.networking.GamePacket;
 import finalforeach.cosmicreach.networking.NetworkIdentity;
 import finalforeach.cosmicreach.networking.server.ServerSingletons;
+import io.github.CrabK1ng.Proximity.Constants;
 import io.github.CrabK1ng.Proximity.Proximity;
-import io.github.CrabK1ng.Proximity.opus.OpusCodec;
+import io.github.CrabK1ng.Proximity.opus.OpusDecoderHandler;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-
-import java.util.Objects;
 
 public class ProximityPacket extends GamePacket implements IProximityPacket {
 
@@ -32,8 +31,7 @@ public class ProximityPacket extends GamePacket implements IProximityPacket {
     @Override
     public void receive(ByteBuf in, Vector3 position, String user) {
         if (in.hasArray()) {
-            byte[] array = in.array();
-            this.buffer = array;
+            this.buffer = in.array();
             this.position = position;
             this.user = user;
         } else {
@@ -42,7 +40,7 @@ public class ProximityPacket extends GamePacket implements IProximityPacket {
             this.buffer = array;
             this.position = position;
             this.user = user;
-            
+
         }
     }
 
@@ -56,10 +54,26 @@ public class ProximityPacket extends GamePacket implements IProximityPacket {
     @Override
     public void handle(NetworkIdentity identity, ChannelHandlerContext ctx) {
         if (identity.isClient()) {
+            int sampleRate = 8000; // Opus supports 8000, 12000, 16000, 24000, and 48000
+            int channels = 1;       // Mono (1) or Stereo (2)
             if (buffer != null /*&& !Objects.equals(identity.getPlayer().getUsername(), user)*/) {
-                OpusCodec codec = OpusCodec.createDefault();
-                byte[] decoded = codec.decodeFrame(buffer);
-                Proximity.speakers.write(decoded, 0, buffer.length);
+                OpusDecoderHandler decoder = null;
+                try {
+                    decoder = new OpusDecoderHandler(sampleRate, channels);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                short[] decoded;
+                try {
+                    decoded = decoder.decode(buffer);
+                } catch (Exception e) {
+                    throw new RuntimeException("Failed to decode Opus data", e);
+                }
+
+                byte[] byteDecoded = Proximity.shortToByteArray(decoded);
+                Constants.LOGGER.info("Writing to speaker");
+                Constants.LOGGER.info(byteDecoded.length);
+                Proximity.speakers.write(byteDecoded, 0, byteDecoded.length);
             }
         }
         if (identity.isServer()){

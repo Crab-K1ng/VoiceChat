@@ -2,9 +2,10 @@ package io.github.CrabK1ng.Proximity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import io.github.CrabK1ng.Proximity.opus.OpusCodec;
 
 import javax.sound.sampled.*;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 public class Proximity {
     public static SourceDataLine speakers;
@@ -27,9 +28,17 @@ public class Proximity {
         Gdx.gl.glBindTexture(GL20.GL_TEXTURE_2D, 0);
     }
 
+    public static byte[] shortToByteArray(short[] shortArray) {
+        ByteBuffer buffer = ByteBuffer.allocate(shortArray.length * 2);
+        buffer.order(ByteOrder.LITTLE_ENDIAN); // Ensure correct byte order
+        for (short s : shortArray) {
+            buffer.putShort(s);
+        }
+        return buffer.array();
+    }
     public static void openMicrophone(){
             try {
-                AudioFormat format = new AudioFormat(44100, 16, 1, true, false);
+                AudioFormat format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 48000, 16, 1, 2, 48000, false);
                 DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
 
                 if (!AudioSystem.isLineSupported(info)) {
@@ -47,7 +56,7 @@ public class Proximity {
 
         public static void openSpeaker(){
             try {
-                AudioFormat format = new AudioFormat(44100, 16, 1, true, false);
+                AudioFormat format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 48000, 16, 1, 2, 48000, false);
                 DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
 
                 if (!AudioSystem.isLineSupported(info)) {
