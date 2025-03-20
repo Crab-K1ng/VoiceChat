@@ -30,7 +30,7 @@ public class ClientInitializer implements ClientModInitializer {
             PauseableThread AudioCapture = Threads.createPauseableThread("AudioCaptureThread", () -> {
                 int sampleRate = 8000; // Opus supports 8000, 12000, 16000, 24000, and 48000
                 int channels = 1;       // Mono (1) or Stereo (2)
-                int frameSize = 960;    // Typical frame size for 20ms at 48kHz
+                int frameSize = 160;    // Typical frame size for 20ms at 48kHz
                 OpusEncoderHandler encoder = null;
                 try {
                     encoder = new OpusEncoderHandler(sampleRate, channels);
