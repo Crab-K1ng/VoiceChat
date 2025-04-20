@@ -4,6 +4,8 @@ import com.badlogic.gdx.utils.PauseableThread;
 import com.github.puzzle.core.loader.launch.provider.mod.entrypoint.impls.ClientModInitializer;
 import finalforeach.cosmicreach.GameSingletons;
 import finalforeach.cosmicreach.Threads;
+import finalforeach.cosmicreach.entities.player.Player;
+import finalforeach.cosmicreach.gamestates.GameState;
 import finalforeach.cosmicreach.gamestates.InGame;
 import finalforeach.cosmicreach.networking.client.ClientNetworkManager;
 import io.github.CrabK1ng.Proximity.networking.ProximityPacket;
@@ -12,6 +14,7 @@ import io.github.CrabK1ng.Proximity.opus.OpusEncoderHandler;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import static finalforeach.cosmicreach.gamestates.GameState.currentGameState;
 import static io.github.CrabK1ng.Proximity.Proximity.microphone;
 
 
@@ -41,12 +44,14 @@ public class ClientInitializer implements ClientModInitializer {
                     while (Proximity.lineOpen && ClientNetworkManager.isConnected()) {
                         byte[] byteBuffer = new byte[frameSize * 2]; // 2 channels, 960 samples per channel, 2 bytes per sample
                         int bytesRead = microphone.read(byteBuffer, 0, byteBuffer.length);
+                        Proximity.micLevel = Proximity.calculateVolumePercent(byteBuffer,bytesRead);
                         short[] buffer = new short[bytesRead / 2]; // Each short takes 2 bytes
                         ByteBuffer.wrap(byteBuffer).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(buffer);
 
                         byte[] encoded = encoder.encode(buffer);
-                        if (encoded.length > 0) {
-                            ProximityPacket ProximityPacket = new ProximityPacket(encoded.clone(), InGame.getLocalPlayer().getPosition(),InGame.getLocalPlayer().getUsername());
+                        if (encoded.length > 0 && currentGameState instanceof InGame) {
+                            Player player = InGame.getLocalPlayer();
+                            ProximityPacket ProximityPacket = new ProximityPacket(encoded.clone(), player.getPosition(),player.getUsername());
                             ClientNetworkManager.sendAsClient(ProximityPacket);
                        }
                     }
