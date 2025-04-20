@@ -4,6 +4,7 @@
   "package": "io.github.CrabK1ng.Proximity.mixins",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "BlockGameMixin"
   ],
   "client": [
     "InGameMixin",

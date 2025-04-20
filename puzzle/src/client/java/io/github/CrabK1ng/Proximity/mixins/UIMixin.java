@@ -3,21 +3,14 @@ package io.github.CrabK1ng.Proximity.mixins;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import finalforeach.cosmicreach.gamestates.GameState;
-import finalforeach.cosmicreach.gamestates.InGame;
 import finalforeach.cosmicreach.rendering.GameTexture;
 import finalforeach.cosmicreach.ui.UI;
 import io.github.CrabK1ng.Proximity.Proximity;
-import io.github.CrabK1ng.Proximity.VoiceMenu;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import static finalforeach.cosmicreach.gamestates.GameState.currentGameState;
-import static io.github.CrabK1ng.Proximity.ProximityControls.openVoiceMenu;
-import static io.github.CrabK1ng.Proximity.ProximityControls.toggleMute;
 
 @Mixin(UI.class)
 public abstract class UIMixin {
@@ -45,22 +38,6 @@ public abstract class UIMixin {
             Proximity.initText();
             statusIcon.draw(UI.batch);
             UI.batch.end();
-        }
-    }
-
-    @Inject(method = "render", at = @At("HEAD"))
-    public void onKey(CallbackInfo ci) {
-        if (toggleMute.isJustPressed()) {
-            Proximity.toggleMic();
-        }
-        if (openVoiceMenu.isJustPressed()) {
-            Proximity.toggleMenu();
-        }
-        if (Proximity.menuOpen && !(currentGameState instanceof VoiceMenu)) {
-            GameState.switchToGameState(new VoiceMenu());
-        }
-        if (!Proximity.menuOpen && currentGameState instanceof VoiceMenu) {
-            VoiceMenu.switchToGameState(new InGame());
         }
     }
 }

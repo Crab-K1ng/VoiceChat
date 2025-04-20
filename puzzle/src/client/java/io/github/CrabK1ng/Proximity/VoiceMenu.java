@@ -1,113 +1,194 @@
 package io.github.CrabK1ng.Proximity;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ScreenUtils;
-import finalforeach.cosmicreach.gamestates.GameState;
-import finalforeach.cosmicreach.gamestates.InGame;
+import finalforeach.cosmicreach.ClientZoneLoader;
+import finalforeach.cosmicreach.TickRunner;
+import finalforeach.cosmicreach.gamestates.*;
 import finalforeach.cosmicreach.lang.Lang;
-import finalforeach.cosmicreach.rendering.GameTexture;
 import finalforeach.cosmicreach.settings.GraphicsSettings;
+import finalforeach.cosmicreach.settings.INumberSetting;
+import finalforeach.cosmicreach.settings.SoundSettings;
+import finalforeach.cosmicreach.settings.types.IntSetting;
 import finalforeach.cosmicreach.ui.actions.AlignXAction;
 import finalforeach.cosmicreach.ui.actions.AlignYAction;
 import finalforeach.cosmicreach.ui.widgets.CRButton;
-import finalforeach.cosmicreach.world.Sky;
+import finalforeach.cosmicreach.ui.widgets.CRSlider;
 
-public class VoiceMenu extends GameState {
-    public static Texture micOn = GameTexture.load("proximity:mic.png").get();
-    public static Texture micOff = GameTexture.load("proximity:mic_off.png").get();
-    private PerspectiveCamera skyCamera;
+import java.text.NumberFormat;
 
-    public VoiceMenu() {
+import static io.github.CrabK1ng.Proximity.Proximity.lineOpen;
+
+public class VoiceMenu extends GameState implements IGameStateInWorld {
+    final String on = Lang.get("on_state");
+    final String off = Lang.get("off_state");
+
+    boolean cursorCaught;
+    private final NumberFormat percentFormat = Lang.getPercentFormatter();
+
+    @Override
+    public void onSwitchTo()
+    {
+        super.onSwitchTo();
+        Gdx.input.setInputProcessor(stage);
+    }
+
+    @Override
+    public void switchAwayTo(GameState gameState)
+    {
+        TickRunner.INSTANCE.continueTickThread();
+        super.switchAwayTo(gameState);
+        Gdx.input.setInputProcessor(null);
+    }
+
+    private CRSlider createSettingsCRSlider(final INumberSetting setting, final String prefix, float min, float max, float stepSize, final NumberFormat valueTextFormat) {
+        CRSlider slider = new CRSlider((String)null, min, max, stepSize, false) {
+            protected void onChangeEvent(ChangeListener.ChangeEvent event) {
+                float currentValue = this.getValue();
+                setting.setValue(currentValue);
+                String formattedValue;
+                if (valueTextFormat == null) {
+                    if (setting instanceof IntSetting) {
+                        formattedValue = "" + (int)currentValue;
+                    } else {
+                        formattedValue = "" + currentValue;
+                    }
+                } else {
+                    formattedValue = valueTextFormat.format((double)currentValue);
+                }
+
+                this.setText(prefix + formattedValue);
+            }
+        };
+        slider.setWidth(250.0F);
+        slider.setValue(setting.getValueAsFloat());
+        return slider;
+    }
+
+    public VoiceMenu(boolean cursorCaught) {
+        this.cursorCaught = cursorCaught;
+        Gdx.input.setCursorPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
     }
 
     public void create() {
+        super.create();
+        TickRunner.INSTANCE.pauseThread();
+        if (ClientZoneLoader.currentInstance != null) {
+            ClientZoneLoader.currentInstance.requestSave();
+        }
+
+        Gdx.input.setCursorCatched(false);
+
         super.create();
         Table table = new Table();
         table.setFillParent(true);
         this.stage.addActor(table);
         System.gc();
-        CRButton startButton = new CRButton(Lang.get("startButton")) {
-            public void onClick() {
-                super.onClick();
-                GameState.switchToGameState(new InGame());
-            }
-        };
-        startButton.addAction(new AlignXAction(1, 0.5F));
-        startButton.addAction(new AlignYAction(1, 0.5F, 40.0F));
-        startButton.setSize(275.0F, 35.0F);
-        this.stage.addActor(startButton);
-        CRButton optionsButton = new CRButton(Lang.get("optionsButton")) {
-            public void onClick() {
-                super.onClick();
-                Proximity.toggleIcon();
-            }
-        };
-        optionsButton.addAction(new AlignXAction(1, 0.5F));
-        optionsButton.addAction(new AlignYAction(1, 0.5F, -95.0F));
-        optionsButton.setSize(275.0F, 35.0F);
-        this.stage.addActor(optionsButton);
 
-        PerspectiveCamera worldCamera = new PerspectiveCamera(GraphicsSettings.fieldOfView.getValue(), (float) Gdx.graphics.getWidth(), (float) Gdx.graphics.getHeight());
-        worldCamera.near = 0.1F;
-        worldCamera.far = 1000.0F;
-        this.skyCamera = new PerspectiveCamera(GraphicsSettings.fieldOfView.getValue(), (float)Gdx.graphics.getWidth(), (float)Gdx.graphics.getHeight());
-        this.skyCamera.near = 0.1F;
-        this.skyCamera.far = 2500.0F;
-        CRButton smallLangButton = new CRButton() {
+        //close button
+        CRButton closeButton = new CRButton("Close") {
+            public void onClick() {
+                super.onClick();
+                GameState.switchToGameState(GameState.IN_GAME);
+            }
+        };
+        closeButton.addAction(new AlignXAction(1, 0.5F));
+        closeButton.addAction(new AlignYAction(1, 0.5F, 40.0F));
+        closeButton.setSize(275.0F, 35.0F);
+        this.stage.addActor(closeButton);
+
+        //mic volume slider
+        CRSlider soundSlider = this.createSettingsCRSlider(SoundSettings.soundVolume, "Mic Volume: ", 0.0F, 2.0F, 0.01F, this.percentFormat);
+        soundSlider.addAction(new AlignXAction(1, 0.5F));
+        soundSlider.addAction(new AlignYAction(1, 0.5F, -10.0F));
+        soundSlider.setSize(275.0F, 35.0F);
+        this.stage.addActor(soundSlider);
+
+
+        //mic button
+        CRButton micButton = new CRButton() {
             public void onClick() {
                 super.onClick();
                 Proximity.toggleMic();
+                this.updateText();
+            }
+
+            public void updateText() {
+                String string = "Mic: "/*Lang.get("difficultyButton")*/;
+                this.setText(string + ((lineOpen) ? VoiceMenu.this.on : VoiceMenu.this.off));
             }
         };
-        smallLangButton.addAction(new AlignXAction(8, 1.0F, -58.0F));
-        smallLangButton.addAction(new AlignYAction(4, 0.0F, 60.0F));
-        smallLangButton.add(new Image(micOn));
-        smallLangButton.setSize(50.0F, 50.0F);
-        this.stage.addActor(smallLangButton);
-    }
 
-    public void onSwitchTo() {
-        super.onSwitchTo();
-        Gdx.input.setInputProcessor(new InputMultiplexer(new InputProcessor[]{this.stage, new InputAdapter() {
-            public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-                return true;
+        micButton.onClick();
+        micButton.onClick();  //update text
+
+        micButton.addAction(new AlignXAction(1, 0.5F));
+        micButton.addAction(new AlignYAction(1, 0.5F, -60.0F));
+        micButton.setSize(275.0F, 35.0F);
+        this.stage.addActor(micButton);
+
+        //icon button
+        CRButton iconButton = new CRButton("iconButton") {
+            public void onClick() {
+                super.onClick();
+                Proximity.toggleIcon();
+                this.updateText();
             }
-        }}));
+
+            public void updateText() {
+                String string = "Icon: "/*Lang.get("difficultyButton")*/;
+                this.setText(string + ((Proximity.drawIcon) ? VoiceMenu.this.on : VoiceMenu.this.off));
+            }
+        };
+        iconButton.onClick();
+        iconButton.onClick();   //update text
+
+        iconButton.addAction(new AlignXAction(1, 0.5F));
+        iconButton.addAction(new AlignYAction(1, 0.5F, -100.0F));
+        iconButton.setSize(275.0F, 35.0F);
+        this.stage.addActor(iconButton);
+
+        //other stuff
+        PerspectiveCamera worldCamera = new PerspectiveCamera(GraphicsSettings.fieldOfView.getValue(), (float) Gdx.graphics.getWidth(), (float) Gdx.graphics.getHeight());
+        worldCamera.near = 0.1F;
+        worldCamera.far = 1000.0F;
+        PerspectiveCamera skyCamera = new PerspectiveCamera(GraphicsSettings.fieldOfView.getValue(), (float) Gdx.graphics.getWidth(), (float) Gdx.graphics.getHeight());
+        skyCamera.near = 0.1F;
+        skyCamera.far = 2500.0F;
+        System.gc();
     }
 
-    public void switchAwayTo(GameState gameState) {
-        super.switchAwayTo(gameState);
-        Gdx.input.setInputProcessor((InputProcessor)null);
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        IN_GAME.resize(width, height);
     }
 
     public void render() {
-        if (Proximity.menuOpen) {
-            super.render();
-            this.stage.act();
-            ScreenUtils.clear(0.0F, 0.0F, 0.0F, 1.0F, true);
-            Gdx.gl.glEnable(2929);
-            Gdx.gl.glDepthFunc(513);
-            Gdx.gl.glEnable(2884);
-            Gdx.gl.glCullFace(1029);
-            Gdx.gl.glEnable(3042);
-            Gdx.gl.glBlendFunc(770, 771);
-            Sky.SPACE_DAY.drawSky(this.skyCamera);
-            this.skyCamera.rotate(Vector3.Z, Gdx.graphics.getDeltaTime() * 0.25F);
-            Gdx.gl.glActiveTexture(33984);
-            Gdx.gl.glBindTexture(3553, 0);
-            Gdx.gl.glCullFace(1028);
-            this.stage.draw();
-            Gdx.gl.glEnable(2884);
-            Gdx.gl.glCullFace(1029);
-            Gdx.gl.glDepthFunc(519);
+        super.render();
+        if (!this.firstFrame && Gdx.input.isKeyJustPressed(111)) {
+            TickRunner.INSTANCE.continueTickThread();
+            Proximity.toggleMenu();
+            switchToGameState(IN_GAME);
         }
+
+        super.render();
+        this.stage.act();
+        ScreenUtils.clear(0.0F, 0.0F, 0.0F, 1.0F, true);
+        Gdx.gl.glEnable(2929);
+        Gdx.gl.glDepthFunc(513);
+        Gdx.gl.glEnable(2884);
+        Gdx.gl.glCullFace(1029);
+        Gdx.gl.glEnable(3042);
+        Gdx.gl.glBlendFunc(770, 771);
+        Gdx.gl.glActiveTexture(33984);
+        Gdx.gl.glBindTexture(3553, 0);
+        Gdx.gl.glCullFace(1028);
+        this.stage.draw();
+        Gdx.gl.glEnable(2884);
+        Gdx.gl.glCullFace(1029);
+        Gdx.gl.glDepthFunc(519);
     }
 }
