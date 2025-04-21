@@ -2,6 +2,7 @@ package io.github.CrabK1ng.Proximity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
@@ -9,14 +10,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ScreenUtils;
+import finalforeach.cosmicreach.BlockGame;
 import finalforeach.cosmicreach.ClientZoneLoader;
 import finalforeach.cosmicreach.TickRunner;
 import finalforeach.cosmicreach.gamestates.*;
+import finalforeach.cosmicreach.io.ChunkSaver;
 import finalforeach.cosmicreach.lang.Lang;
+import finalforeach.cosmicreach.rendering.shaders.SpriteBatchShader;
 import finalforeach.cosmicreach.settings.GraphicsSettings;
 import finalforeach.cosmicreach.settings.INumberSetting;
 import finalforeach.cosmicreach.settings.types.IntSetting;
+import finalforeach.cosmicreach.ui.FontRenderer;
 import finalforeach.cosmicreach.ui.GameStyles;
+import finalforeach.cosmicreach.ui.HorizontalAnchor;
+import finalforeach.cosmicreach.ui.VerticalAnchor;
 import finalforeach.cosmicreach.ui.actions.AlignXAction;
 import finalforeach.cosmicreach.ui.actions.AlignYAction;
 import finalforeach.cosmicreach.ui.screens.CustomScreen;
@@ -33,15 +40,15 @@ public class VoiceMenu extends GameState implements IGameStateInWorld {
 
     ProgressBar.ProgressBarStyle style = new ProgressBar.ProgressBarStyle();
     NinePatch bg9Patch = GameStyles.containerBackground9Patch;
-    style.background = new NinePatchDrawable(bg9Patch);
-    style.background.setLeftWidth(0.0F);
-    style.background.setRightWidth(0.0F);style.background.setBottomHeight(0.0F);
-    style.background.setTopHeight(0.0F);
-    style.background.setMinWidth(0.0F);
-    style.background.setMinHeight(0.0F);
-    style.knobBefore = new NinePatchDrawable(GameStyles.container9Patch);
+//    style.background = new NinePatchDrawable(bg9Patch);
+//    style.background.setLeftWidth(0.0F);
+//    style.background.setRightWidth(0.0F);style.background.setBottomHeight(0.0F);
+//    style.background.setTopHeight(0.0F);
+//    style.background.setMinWidth(0.0F);
+//    style.background.setMinHeight(0.0F);
+//    style.knobBefore = new NinePatchDrawable(GameStyles.container9Patch);
 
-    ProgressBar volumeBar = new ProgressBar(0f, 100f, 1f, true, CustomScreen.) {};
+//    ProgressBar volumeBar = new ProgressBar(0f, 100f, 1f, true, CustomScreen.) {};
 
 
     boolean cursorCaught;
@@ -170,9 +177,9 @@ public class VoiceMenu extends GameState implements IGameStateInWorld {
         this.stage.addActor(iconButton);
 
         //volume progress bar
-        volumeBar.addAction(new AlignXAction(-1, 0.5F));
-        volumeBar.addAction(new AlignYAction(-1, 0.5F, -100.0F));
-        this.stage.addActor(volumeBar);
+//        volumeBar.addAction(new AlignXAction(-1, 0.5F));
+//        volumeBar.addAction(new AlignYAction(-1, 0.5F, -100.0F));
+//        this.stage.addActor(volumeBar);
 
         //other stuff
         PerspectiveCamera worldCamera = new PerspectiveCamera(GraphicsSettings.fieldOfView.getValue(), (float) Gdx.graphics.getWidth(), (float) Gdx.graphics.getHeight());
@@ -197,19 +204,17 @@ public class VoiceMenu extends GameState implements IGameStateInWorld {
             switchToGameState(IN_GAME);
         }
 
-        super.render();
         this.stage.act();
-        ScreenUtils.clear(0.0F, 0.0F, 0.0F, 1.0F, true);
+        ScreenUtils.clear(0.1F, 0.1F, 0.2F, 1.0F, true);
         Gdx.gl.glEnable(2929);
         Gdx.gl.glDepthFunc(513);
         Gdx.gl.glEnable(2884);
         Gdx.gl.glCullFace(1029);
         Gdx.gl.glEnable(3042);
         Gdx.gl.glBlendFunc(770, 771);
-        Gdx.gl.glActiveTexture(33984);
-        Gdx.gl.glBindTexture(3553, 0);
+        IN_GAME.render();
         Gdx.gl.glCullFace(1028);
-        volumeBar.setValue(Proximity.micLevel);
+//        volumeBar.setValue(Proximity.micLevel);
         this.stage.draw();
         Gdx.gl.glEnable(2884);
         Gdx.gl.glCullFace(1029);
