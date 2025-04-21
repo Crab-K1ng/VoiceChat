@@ -51,6 +51,7 @@ public class Proximity {
         }
         return buffer.array();
     }
+
     public static void openMicrophone(){
             try {
                 AudioFormat format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 48000, 16, 1, 2, 48000, false);

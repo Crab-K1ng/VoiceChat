@@ -5,10 +5,11 @@ import com.github.puzzle.core.loader.launch.provider.mod.entrypoint.impls.Client
 import finalforeach.cosmicreach.GameSingletons;
 import finalforeach.cosmicreach.Threads;
 import finalforeach.cosmicreach.entities.player.Player;
-import finalforeach.cosmicreach.gamestates.GameState;
 import finalforeach.cosmicreach.gamestates.InGame;
 import finalforeach.cosmicreach.networking.client.ClientNetworkManager;
+import io.github.CrabK1ng.Proximity.Utils.Utils;
 import io.github.CrabK1ng.Proximity.networking.ProximityPacket;
+import io.github.CrabK1ng.Proximity.opus.OpusDecoderHandler;
 import io.github.CrabK1ng.Proximity.opus.OpusEncoderHandler;
 
 import java.nio.ByteBuffer;
@@ -34,7 +35,7 @@ public class ClientInitializer implements ClientModInitializer {
                 int sampleRate = 8000; // Opus supports 8000, 12000, 16000, 24000, and 48000
                 int channels = 1;       // Mono (1) or Stereo (2)
                 int frameSize = 160;    // Typical frame size for 20ms at 48kHz
-                OpusEncoderHandler encoder = null;
+                OpusEncoderHandler encoder;
                 try {
                     encoder = new OpusEncoderHandler(sampleRate, channels);
                 } catch (Exception e) {
@@ -45,8 +46,12 @@ public class ClientInitializer implements ClientModInitializer {
                         byte[] byteBuffer = new byte[frameSize * 2]; // 2 channels, 960 samples per channel, 2 bytes per sample
                         int bytesRead = microphone.read(byteBuffer, 0, byteBuffer.length);
                         Proximity.micLevel = Proximity.calculateVolumePercent(byteBuffer,bytesRead);
-                        short[] buffer = new short[bytesRead / 2]; // Each short takes 2 bytes
-                        ByteBuffer.wrap(byteBuffer).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(buffer);
+//                        short[] buffer = new short[bytesRead / 2]; // Each short takes 2 bytes
+//                        ByteBuffer.wrap(byteBuffer).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(buffer);
+
+                        ///////////////////////////////////////////////
+                        short[] buffer = Utils.bytesToShorts(byteBuffer);
+                        ///////////////////////////////////////////////
 
                         byte[] encoded = encoder.encode(buffer);
                         if (encoded.length > 0 && currentGameState instanceof InGame) {
