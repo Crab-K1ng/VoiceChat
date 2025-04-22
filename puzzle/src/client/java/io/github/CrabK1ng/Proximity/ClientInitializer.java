@@ -53,12 +53,7 @@ public class ClientInitializer implements ClientModInitializer {
                         byte[] byteBuffer = new byte[AudioSetting.getSamplesPerBuffer() * AudioSetting.getChannels()]; // 2 channels, 960 samples per channel, 2 bytes per sample
                         int bytesRead = microphone.read(byteBuffer, 0, byteBuffer.length);
                         Proximity.micLevel = Proximity.calculateVolumePercent(byteBuffer,bytesRead);
-//                        short[] buffer = new short[bytesRead / 2]; // Each short takes 2 bytes
-//                        ByteBuffer.wrap(byteBuffer).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(buffer);
-
-                        ///////////////////////////////////////////////
                         short[] buffer = Utils.bytesToShorts(byteBuffer);
-                        ///////////////////////////////////////////////
 
                         byte[] encoded = encoder.encode(buffer);
 
