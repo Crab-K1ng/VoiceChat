@@ -35,30 +35,9 @@ public class AudioRelayServer {
                     .channel(NioDatagramChannel.class)
                     .handler(new SimpleChannelInboundHandler<DatagramPacket>() {
                         @Override
-                        protected void channelRead0(ChannelHandlerContext ctx, DatagramPacket packet) throws Exception {
+                        protected void channelRead0(ChannelHandlerContext ctx, DatagramPacket packet) {
                             ByteBuf buf = packet.content();
                             InetSocketAddress sender = packet.sender();
-
-                            Constants.LOGGER.info("Received from: "+sender);
-
-                            // Parse the username and position
-                            int nameLen = buf.readUnsignedByte();
-                            byte[] nameBytes = new byte[nameLen];
-                            buf.readBytes(nameBytes);
-                            String username = new String(nameBytes, StandardCharsets.UTF_8);
-
-                            Constants.LOGGER.info("Username: "+username);
-
-                            // Read 3 floats for position
-                            float x = buf.readFloat();
-                            float y = buf.readFloat();
-                            float z = buf.readFloat();
-
-                            Constants.LOGGER.info("X: {}, Y: {}, Z: {}", x,y,z);
-
-                            // Get remaining bytes (audio)
-                            byte[] audio = new byte[buf.readableBytes()];
-                            buf.readBytes(audio);
 
                             // Add sender to client list if not present
                             if (clients.stream().noneMatch(c -> c.equals(sender))) {
@@ -68,8 +47,7 @@ public class AudioRelayServer {
                             // Relay audio to all except sender
                             for (InetSocketAddress client : clients) {
                                 if (!client.equals(sender)) {
-                                    ByteBuf outBuf = Unpooled.wrappedBuffer(audio);
-                                    ctx.writeAndFlush(new DatagramPacket(outBuf, client));
+                                    ctx.writeAndFlush(new DatagramPacket(buf, client));
                                 }
                             }
                         }
