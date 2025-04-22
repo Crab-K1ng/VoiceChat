@@ -8,6 +8,7 @@ import finalforeach.cosmicreach.networking.server.ServerSingletons;
 import finalforeach.cosmicreach.savelib.IByteArray;
 import finalforeach.cosmicreach.savelib.crbin.CRBinDeserializer;
 import finalforeach.cosmicreach.savelib.crbin.CRBinSerializer;
+import io.github.CrabK1ng.Proximity.AudioSetting;
 import io.github.CrabK1ng.Proximity.Constants;
 import io.github.CrabK1ng.Proximity.Proximity;
 import io.github.CrabK1ng.Proximity.Utils.Utils;
@@ -47,12 +48,10 @@ public class ProximityPacket extends GamePacket {
     @Override
     public void handle(NetworkIdentity identity, ChannelHandlerContext ctx) {
         if (identity.isClient()) {
-            int sampleRate = 8000; // Opus supports 8000, 12000, 16000, 24000, and 48000
-            int channels = 1;       // Mono (1) or Stereo (2)
             if (buffer != null /*&& !Objects.equals(identity.getPlayer().getUsername(), user)*/) {
                 OpusDecoderHandler decoder;
                 try {
-                    decoder = new OpusDecoderHandler(sampleRate, channels);
+                    decoder = new OpusDecoderHandler(AudioSetting.getSampleRate(), AudioSetting.getChannels());
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -63,10 +62,7 @@ public class ProximityPacket extends GamePacket {
                     throw new RuntimeException("Failed to decode Opus data", e);
                 }
 
-//                byte[] byteDecoded = Proximity.shortToByteArray(decoded);
-                //////////////////////////////////////////////////////////
                 byte[] byteDecoded = Utils.shortsToBytes(decoded);
-                //////////////////////////////////////////////////////////
                 Constants.LOGGER.info("Writing to speaker");
                 Constants.LOGGER.info(byteDecoded.length);
                 Proximity.speakers.write(byteDecoded, 0, byteDecoded.length);

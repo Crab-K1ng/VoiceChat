@@ -40,14 +40,9 @@ public class ClientInitializer implements ClientModInitializer {
 
 
             PauseableThread AudioCapture = Threads.createPauseableThread("AudioCaptureThread", () -> {
-
-
-                int sampleRate = 8000; // Opus supports 8000, 12000, 16000, 24000, and 48000
-                int channels = 1;       // Mono (1) or Stereo (2)
-                int frameSize = 160;    // Typical frame size for 20ms at 48kHz
                 OpusEncoderHandler encoder;
                 try {
-                    encoder = new OpusEncoderHandler(sampleRate, channels);
+                    encoder = new OpusEncoderHandler(AudioSetting.getSampleRate(), AudioSetting.getChannels());
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -55,7 +50,7 @@ public class ClientInitializer implements ClientModInitializer {
 
 
                     while (Proximity.lineOpen && ClientNetworkManager.isConnected()) {
-                        byte[] byteBuffer = new byte[frameSize * 2]; // 2 channels, 960 samples per channel, 2 bytes per sample
+                        byte[] byteBuffer = new byte[AudioSetting.getSamplesPerBuffer() * AudioSetting.getChannels()]; // 2 channels, 960 samples per channel, 2 bytes per sample
                         int bytesRead = microphone.read(byteBuffer, 0, byteBuffer.length);
                         Proximity.micLevel = Proximity.calculateVolumePercent(byteBuffer,bytesRead);
 //                        short[] buffer = new short[bytesRead / 2]; // Each short takes 2 bytes
