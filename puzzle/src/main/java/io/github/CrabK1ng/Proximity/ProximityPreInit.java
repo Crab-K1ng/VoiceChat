@@ -7,5 +7,6 @@ public class ProximityPreInit implements PreModInitializer {
     @Override
     public void onPreInit() {
         Constants.LOGGER.info("Proximity pre-init");
+        AudioSetting.init();
     }
 }

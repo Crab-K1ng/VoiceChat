@@ -43,15 +43,14 @@ public class Proximity {
 
     public static void openMicrophone(){
             try {
-                AudioFormat format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 48000, 16, 1, 2, 48000, false);
-                DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
+                DataLine.Info info = new DataLine.Info(TargetDataLine.class, AudioSetting.getFormat());
 
                 if (!AudioSystem.isLineSupported(info)) {
                     throw new LineUnavailableException("Line not supported");
                 }
 
                 microphone = (TargetDataLine) AudioSystem.getLine(info);
-                microphone.open(format);
+                microphone.open(AudioSetting.getFormat());
                 microphone.start();
 
             } catch (Exception e) {
@@ -61,15 +60,14 @@ public class Proximity {
 
         public static void openSpeaker(){
             try {
-                AudioFormat format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 48000, 16, 1, 2, 48000, false);
-                DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+                DataLine.Info info = new DataLine.Info(SourceDataLine.class, AudioSetting.getFormat());
 
                 if (!AudioSystem.isLineSupported(info)) {
                     throw new LineUnavailableException("Line not supported");
                 }
 
                 speakers = (SourceDataLine) AudioSystem.getLine(info);
-                speakers.open(format);
+                speakers.open(AudioSetting.getFormat());
                 speakers.start();
             } catch (Exception e) {
                 e.printStackTrace();

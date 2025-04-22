@@ -1,5 +1,6 @@
 package io.github.CrabK1ng.Proximity.networking;
 
+import io.github.CrabK1ng.Proximity.AudioSetting;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
@@ -26,10 +27,9 @@ public class AudioClientReceiver {
                     @Override
                     public void channelActive(ChannelHandlerContext ctx) {
                         try {
-                            AudioFormat format = new AudioFormat(44100.0f, 16, 1, true, false);
-                            DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+                            DataLine.Info info = new DataLine.Info(SourceDataLine.class, AudioSetting.getFormat());
                             speakers = (SourceDataLine) AudioSystem.getLine(info);
-                            speakers.open(format);
+                            speakers.open(AudioSetting.getFormat());
                             speakers.start();
                         } catch (LineUnavailableException e) {
                             e.printStackTrace();
