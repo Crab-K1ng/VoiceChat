@@ -56,6 +56,12 @@ public class AudioClientSender {
 
         buf.writeBytes(audio);
 
+//        Constants.LOGGER.info(username);
+//        Constants.LOGGER.info(x);
+//        Constants.LOGGER.info(y);
+//        Constants.LOGGER.info(z);
+//        Constants.LOGGER.info(audio);
+
         channel.writeAndFlush(new DatagramPacket(buf, serverAddress));
     }
 }

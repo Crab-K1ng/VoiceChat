@@ -16,7 +16,7 @@ import static io.github.CrabK1ng.Proximity.ProximityControls.toggleMute;
 
 @Mixin(BlockGame.class)
 public abstract class BlockGameMixin {
-    @Inject(method = "render", at = @At("HEAD"))
+    @Inject(method = "render", at = @At("HEAD"))            //// Control hooking
     public void onKey(CallbackInfo ci) {
         if (toggleMute.isJustPressed() && currentGameState instanceof InGame) {
             Proximity.toggleMic();
