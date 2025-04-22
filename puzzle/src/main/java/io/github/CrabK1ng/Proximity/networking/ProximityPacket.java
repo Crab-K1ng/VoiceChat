@@ -16,10 +16,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
 public class ProximityPacket extends GamePacket {
-    CRBinDeserializer deserial = new CRBinDeserializer();
     String user;
     Vector3 position = new Vector3();
-//    int bufferLength;
     byte[] buffer;
 
     public ProximityPacket(){}
@@ -34,28 +32,16 @@ public class ProximityPacket extends GamePacket {
     public void receive(ByteBuf in) {
         this.readVector3(in, this.position);
         this.user = this.readString(in);
-//        this.bufferLength = this.readInt(in);
-//
-//        in.readBytes(buffer);
-
-        this.deserial.prepareForRead(in.nioBuffer());
-
-        this.buffer = this.deserial.readByteArray("audio");
+        int bufferLength = this.readInt(in);
+        this.buffer = this.readByteArray(bufferLength, in);
     }
 
     @Override
     public void write() {
         this.writeVector3(this.position);
         this.writeString(this.user);
-//        this.writeInt(this.buffer.length);
-//        this.writeByteArray(ByteArray.with(this.buffer));
-//
-//
-
-        CRBinSerializer crbinserializer = new CRBinSerializer();
-        crbinserializer.writeByteArray("audio", this.buffer);
-        IByteArray ibytearray = crbinserializer.toByteArray();
-        this.writeByteArray(ibytearray);
+        this.writeInt(this.buffer.length);
+        this.writeByteArray(ByteArray.with(this.buffer));
     }
 
     @Override
@@ -95,11 +81,11 @@ public class ProximityPacket extends GamePacket {
 
     }
 
-//    public void readByteArray(int bytes, ByteBuf in) {
-//        byte[] byteArray = new byte[bytes];
-//        for(int i = 0; i < bytes; ++i) {
-//            byteArray this.readByte(in);
-//        }
-//
-//    }
+    public byte[] readByteArray(int bytes, ByteBuf in) {
+        byte[] byteArray = new byte[bytes];
+        for(int i = 0; i < bytes; ++i) {
+            byteArray[i] = this.readByte(in);
+        }
+        return byteArray;
+    }
 }
