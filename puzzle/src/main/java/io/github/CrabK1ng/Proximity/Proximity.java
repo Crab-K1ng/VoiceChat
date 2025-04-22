@@ -5,8 +5,6 @@ import com.badlogic.gdx.graphics.GL20;
 import finalforeach.cosmicreach.settings.INumberSetting;
 
 import javax.sound.sampled.*;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 
 public class Proximity {
     public static SourceDataLine speakers;
@@ -41,15 +39,6 @@ public class Proximity {
     public static void initText() {
         Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
         Gdx.gl.glBindTexture(GL20.GL_TEXTURE_2D, 0);
-    }
-
-    public static byte[] shortToByteArray(short[] shortArray) {
-        ByteBuffer buffer = ByteBuffer.allocate(shortArray.length * 2);
-        buffer.order(ByteOrder.LITTLE_ENDIAN); // Ensure correct byte order
-        for (short s : shortArray) {
-            buffer.putShort(s);
-        }
-        return buffer.array();
     }
 
     public static void openMicrophone(){
