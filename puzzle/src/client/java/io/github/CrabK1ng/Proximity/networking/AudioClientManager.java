@@ -8,9 +8,6 @@ public class AudioClientManager {
     public static AudioClientSender audioClientSender;
     public static AudioClientReceiver audioClientReceiver;
 
-    static Thread audioClientSenderThread;
-    static Thread audioClientReceiverThread;
-
     public static boolean isConnected() {
         return audioClientSender != null && audioClientReceiver != null;
     }
@@ -37,7 +34,7 @@ public class AudioClientManager {
         }
 
         try {
-            audioClientSenderThread = Threads.createThread("audioClientSenderThread", () -> {
+            Thread audioClientSenderThread  = Threads.createThread("audioClientSenderThread", () -> {
                 try {
                     audioClientSender = new AudioClientSender(s, port);
                 } catch (Exception e) {
@@ -46,7 +43,7 @@ public class AudioClientManager {
             });
             audioClientSenderThread.start();
 
-            audioClientReceiverThread = Threads.createThread("audioClientReceiverThread", () -> {
+            Thread audioClientReceiverThread = Threads.createThread("audioClientReceiverThread", () -> {
                 try {
                     audioClientReceiver = new AudioClientReceiver();
                     audioClientReceiver.start(port);

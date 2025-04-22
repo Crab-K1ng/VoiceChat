@@ -12,14 +12,5 @@ public class ProximityInit implements ModInitializer {
     public void onInit() {
         Constants.LOGGER.info("Proximity init");
         GamePacket.registerPacket(ProximityPacket.class);
-        if (GameSingletons.isHost) {
-            new Thread(() -> {
-                try {
-                    new AudioRelayServer(9000).run();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }).start();
-        }
     }
 }
