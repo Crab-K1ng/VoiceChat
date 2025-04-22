@@ -10,6 +10,7 @@ import io.netty.channel.socket.DatagramPacket;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 
 import java.net.InetSocketAddress;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -24,6 +25,8 @@ public class AudioRelayServer {
     }
 
     public void run() throws Exception {
+        Constants.LOGGER.info("Initialized relay server");
+
         Bootstrap b = new Bootstrap();
         NioEventLoopGroup group = new NioEventLoopGroup();
 
@@ -36,16 +39,26 @@ public class AudioRelayServer {
                             ByteBuf buf = packet.content();
                             InetSocketAddress sender = packet.sender();
 
+                            Constants.LOGGER.info("Received from: "+sender);
+
                             // Parse the username and position
                             int nameLen = buf.readUnsignedByte();
-                            buf.skipBytes(nameLen); // Skip username
-                            buf.skipBytes(12); // Skip 3 floats for position
+                            byte[] nameBytes = new byte[nameLen];
+                            buf.readBytes(nameBytes);
+                            String username = new String(nameBytes, StandardCharsets.UTF_8);
+
+                            Constants.LOGGER.info("Username: "+username);
+
+                            // Read 3 floats for position
+                            float x = buf.readFloat();
+                            float y = buf.readFloat();
+                            float z = buf.readFloat();
+
+                            Constants.LOGGER.info("X: {}, Y: {}, Z: {}", x,y,z);
 
                             // Get remaining bytes (audio)
                             byte[] audio = new byte[buf.readableBytes()];
                             buf.readBytes(audio);
-
-                            Constants.LOGGER.info(audio);
 
                             // Add sender to client list if not present
                             if (clients.stream().noneMatch(c -> c.equals(sender))) {

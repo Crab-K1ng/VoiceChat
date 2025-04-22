@@ -15,8 +15,6 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.DatagramPacket;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 
-import javax.sound.sampled.*;
-
 public class AudioClientReceiver {
 
     public void start(int listenPort) throws Exception {
