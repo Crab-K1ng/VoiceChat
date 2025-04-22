@@ -19,6 +19,7 @@ public class ProximityPacket extends GamePacket {
     CRBinDeserializer deserial = new CRBinDeserializer();
     String user;
     Vector3 position = new Vector3();
+//    int bufferLength;
     byte[] buffer;
 
     public ProximityPacket(){}
@@ -33,8 +34,12 @@ public class ProximityPacket extends GamePacket {
     public void receive(ByteBuf in) {
         this.readVector3(in, this.position);
         this.user = this.readString(in);
+//        this.bufferLength = this.readInt(in);
+//
+//        in.readBytes(buffer);
 
         this.deserial.prepareForRead(in.nioBuffer());
+
         this.buffer = this.deserial.readByteArray("audio");
     }
 
@@ -42,6 +47,11 @@ public class ProximityPacket extends GamePacket {
     public void write() {
         this.writeVector3(this.position);
         this.writeString(this.user);
+//        this.writeInt(this.buffer.length);
+//        this.writeByteArray(ByteArray.with(this.buffer));
+//
+//
+
         CRBinSerializer crbinserializer = new CRBinSerializer();
         crbinserializer.writeByteArray("audio", this.buffer);
         IByteArray ibytearray = crbinserializer.toByteArray();
@@ -75,17 +85,21 @@ public class ProximityPacket extends GamePacket {
                 Constants.LOGGER.info(byteDecoded.length);
                 Proximity.speakers.write(byteDecoded, 0, byteDecoded.length);
             }
-            Constants.LOGGER.info("isClient");
         }
         if (identity.isServer()){
             if (buffer != null) {
                 ProximityPacket ProximityPacket = new ProximityPacket(buffer.clone(),this.position,this.user);
                 ServerSingletons.SERVER.broadcastToAll(ProximityPacket);
-                Constants.LOGGER.info("isServer");
-            }else {
-                Constants.LOGGER.info("isNull");
             }
         }
 
     }
+
+//    public void readByteArray(int bytes, ByteBuf in) {
+//        byte[] byteArray = new byte[bytes];
+//        for(int i = 0; i < bytes; ++i) {
+//            byteArray this.readByte(in);
+//        }
+//
+//    }
 }

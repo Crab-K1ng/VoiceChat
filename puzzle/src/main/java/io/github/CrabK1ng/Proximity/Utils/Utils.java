@@ -1,5 +1,8 @@
 package io.github.CrabK1ng.Proximity.Utils;
 
+import finalforeach.cosmicreach.savelib.IByteArray;
+import io.netty.buffer.ByteBuf;
+
 public class Utils {
 
     public static short[] bytesToShorts(byte[] bytes) {
