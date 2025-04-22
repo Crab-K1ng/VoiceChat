@@ -47,13 +47,11 @@ public class AudioClientReceiver {
 
                         Vector3 vector3 = new Vector3();
                         vector3.x = content.readFloat();
-                        vector3.y =  content.readFloat();
-                        vector3.z =  content.readFloat();
+                        vector3.y = content.readFloat();
+                        vector3.z = content.readFloat();
 
                         byte[] audio = new byte[content.readableBytes()];
                         content.readBytes(audio); // Moves the reader index forward
-
-
 
                         OpusDecoderHandler decoder;
                         try {
