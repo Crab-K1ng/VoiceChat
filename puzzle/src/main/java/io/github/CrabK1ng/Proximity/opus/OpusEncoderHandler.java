@@ -6,7 +6,7 @@ public class OpusEncoderHandler {
     private OpusEncoder encoder;
 
     public OpusEncoderHandler(int sampleRate, int channels) throws Exception {
-        encoder = new OpusEncoder(sampleRate, channels, OpusEncoder.Application.AUDIO);
+        encoder = new OpusEncoder(sampleRate, channels, OpusEncoder.Application.VOIP);
     }
 
     public byte[] encode(short[] pcmData) throws Exception {
