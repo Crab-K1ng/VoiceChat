@@ -5,6 +5,9 @@ import com.badlogic.gdx.utils.ByteArray;
 import finalforeach.cosmicreach.networking.GamePacket;
 import finalforeach.cosmicreach.networking.NetworkIdentity;
 import finalforeach.cosmicreach.networking.server.ServerSingletons;
+import finalforeach.cosmicreach.savelib.IByteArray;
+import finalforeach.cosmicreach.savelib.crbin.CRBinDeserializer;
+import finalforeach.cosmicreach.savelib.crbin.CRBinSerializer;
 import io.github.CrabK1ng.Proximity.Constants;
 import io.github.CrabK1ng.Proximity.Proximity;
 import io.github.CrabK1ng.Proximity.Utils.Utils;
@@ -12,16 +15,13 @@ import io.github.CrabK1ng.Proximity.opus.OpusDecoderHandler;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
-public class ProximityPacket extends GamePacket implements IProximityPacket {
-
+public class ProximityPacket extends GamePacket {
+    CRBinDeserializer deserial = new CRBinDeserializer();
     String user;
-    Vector3 position;
+    Vector3 position = new Vector3();
     byte[] buffer;
 
     public ProximityPacket(){}
-
-    @Override
-    public void receive(ByteBuf byteBuf) {}
 
     public ProximityPacket(byte[] buffer, Vector3 position, String user) {
         this.buffer = buffer;
@@ -30,26 +30,22 @@ public class ProximityPacket extends GamePacket implements IProximityPacket {
     }
 
     @Override
-    public void receive(ByteBuf in, Vector3 position, String user) {
-        if (in.hasArray()) {
-            this.buffer = in.array();
-            this.position = position;
-            this.user = user;
-        } else {
-            byte[] array = new byte[in.readableBytes()];
-            in.getBytes(in.readerIndex(), array);
-            this.buffer = array;
-            this.position = position;
-            this.user = user;
+    public void receive(ByteBuf in) {
+        this.readVector3(in, this.position);
+        this.user = this.readString(in);
 
-        }
+        this.deserial.prepareForRead(in.nioBuffer());
+        this.buffer = this.deserial.readByteArray("audio");
     }
 
     @Override
     public void write() {
-        this.writeByteArray(ByteArray.with(this.buffer));
         this.writeVector3(this.position);
         this.writeString(this.user);
+        CRBinSerializer crbinserializer = new CRBinSerializer();
+        crbinserializer.writeByteArray("audio", this.buffer);
+        IByteArray ibytearray = crbinserializer.toByteArray();
+        this.writeByteArray(ibytearray);
     }
 
     @Override
@@ -86,13 +82,10 @@ public class ProximityPacket extends GamePacket implements IProximityPacket {
                 ProximityPacket ProximityPacket = new ProximityPacket(buffer.clone(),this.position,this.user);
                 ServerSingletons.SERVER.broadcastToAll(ProximityPacket);
                 Constants.LOGGER.info("isServer");
+            }else {
+                Constants.LOGGER.info("isNull");
             }
         }
 
-    }
-
-    @Override
-    public void receive(ByteBuf in, Vector3 position) {
-        
     }
 }
