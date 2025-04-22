@@ -1,5 +1,7 @@
 package io.github.CrabK1ng.Proximity.networking;
 
+import io.github.CrabK1ng.Proximity.Utils.Utils;
+import io.github.CrabK1ng.Proximity.opus.OpusDecoderHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
@@ -42,9 +44,26 @@ public class AudioClientReceiver {
                         byte[] audio = new byte[content.readableBytes()];
                         content.readBytes(audio);
 
+                        OpusDecoderHandler decoder;
+                        try {
+                            decoder = new OpusDecoderHandler(8000, 1);
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                        short[] decoded;
+                        try {
+                            decoded = decoder.decode(audio);
+                        } catch (Exception e) {
+                            throw new RuntimeException("Failed to decode Opus data", e);
+                        }
+
+//                byte[] byteDecoded = Proximity.shortToByteArray(decoded);
+                        //////////////////////////////////////////////////////////
+                        byte[] byteDecoded = Utils.shortsToBytes(decoded);
+
                         // Write to audio output
                         if (speakers != null) {
-                            speakers.write(audio, 0, audio.length);
+                            speakers.write(byteDecoded, 0, byteDecoded.length);
                         }
                     }
 

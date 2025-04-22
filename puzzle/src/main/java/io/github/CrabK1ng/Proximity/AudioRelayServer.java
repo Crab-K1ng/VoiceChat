@@ -45,6 +45,8 @@ public class AudioRelayServer {
                             byte[] audio = new byte[buf.readableBytes()];
                             buf.readBytes(audio);
 
+                            Constants.LOGGER.info(audio);
+
                             // Add sender to client list if not present
                             if (clients.stream().noneMatch(c -> c.equals(sender))) {
                                 clients.add(sender);
