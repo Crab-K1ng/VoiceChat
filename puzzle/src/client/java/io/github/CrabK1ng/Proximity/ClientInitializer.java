@@ -8,8 +8,7 @@ import finalforeach.cosmicreach.entities.player.Player;
 import finalforeach.cosmicreach.gamestates.InGame;
 import finalforeach.cosmicreach.networking.client.ClientNetworkManager;
 import io.github.CrabK1ng.Proximity.Utils.Utils;
-import io.github.CrabK1ng.Proximity.networking.AudioClientReceiver;
-import io.github.CrabK1ng.Proximity.networking.AudioClientSender;
+import io.github.CrabK1ng.Proximity.networking.AudioClientManager;
 import io.github.CrabK1ng.Proximity.opus.OpusEncoderHandler;
 
 import static finalforeach.cosmicreach.gamestates.GameState.currentGameState;
@@ -28,17 +27,6 @@ public class ClientInitializer implements ClientModInitializer {
 
     public static void captureAudio() {
         if (ClientNetworkManager.isConnected()) {
-            // Start receiver
-            new Thread(() -> {
-                try {
-                    new AudioClientReceiver().start(9000); // Can be any free port
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }).start();
-
-
-
             PauseableThread AudioCapture = Threads.createPauseableThread("AudioCaptureThread", () -> {
                 OpusEncoderHandler encoder;
                 try {
@@ -65,8 +53,7 @@ public class ClientInitializer implements ClientModInitializer {
                             float x = player.getPosition().x;
                             float y = player.getPosition().y;
                             float z = player.getPosition().z;
-                            AudioClientSender sender = new AudioClientSender("127.0.0.1", 9000); // Replace with server IP
-                            sender.sendAudio(player.getUsername(), x, y, z, encoded.clone());
+                            AudioClientManager.sendAudio(player.getUsername(), x, y, z, encoded.clone());
                        }
                     }
                 } catch (Exception e) {
