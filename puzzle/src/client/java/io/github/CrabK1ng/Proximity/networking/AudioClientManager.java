@@ -1,7 +1,10 @@
 package io.github.CrabK1ng.Proximity.networking;
 
+import com.badlogic.gdx.math.Vector3;
 import finalforeach.cosmicreach.Threads;
 import finalforeach.cosmicreach.util.logging.Logger;
+
+import java.util.Vector;
 
 public class AudioClientManager {
     public static int port = 9000;
@@ -58,8 +61,8 @@ public class AudioClientManager {
         }
     }
 
-    public static void sendAudio(String username, float x, float y, float z, byte[] audio) {
-        audioClientSender.sendAudio(username, x, y, z, audio);
+    public static void sendAudio(String username, Vector3 pos, byte[] audio) {
+        audioClientSender.sendAudio(username, pos, audio);
     }
 }
 

@@ -53,7 +53,7 @@ public class ClientInitializer implements ClientModInitializer {
                             float x = player.getPosition().x;
                             float y = player.getPosition().y;
                             float z = player.getPosition().z;
-                            AudioClientManager.sendAudio(player.getUsername(), x, y, z, encoded.clone());
+                            AudioClientManager.sendAudio(player.getUsername(), player.getPosition(), encoded.clone());
                        }
                     }
                 } catch (Exception e) {

@@ -1,5 +1,6 @@
 package io.github.CrabK1ng.Proximity.networking;
 
+import com.badlogic.gdx.math.Vector3;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -43,24 +44,19 @@ public class AudioClientSender {
         channel = bootstrap.bind(0).sync().channel();
     }
 
-    public void sendAudio(String username, float x, float y, float z, byte[] audio) {
+    public void sendAudio(String username, Vector3 pos, byte[] audio) {
         ByteBuf buf = Unpooled.buffer();
 
         byte[] nameBytes = username.getBytes(StandardCharsets.UTF_8);
         buf.writeByte(nameBytes.length);
         buf.writeBytes(nameBytes);
 
-        buf.writeFloat(x);
-        buf.writeFloat(y);
-        buf.writeFloat(z);
+        buf.writeFloat(pos.x);
+        buf.writeFloat(pos.y);
+        buf.writeFloat(pos.z);
 
         buf.writeBytes(audio);
 
-//        Constants.LOGGER.info(username);
-//        Constants.LOGGER.info(x);
-//        Constants.LOGGER.info(y);
-//        Constants.LOGGER.info(z);
-//        Constants.LOGGER.info(audio);
 
         channel.writeAndFlush(new DatagramPacket(buf, serverAddress));
     }
