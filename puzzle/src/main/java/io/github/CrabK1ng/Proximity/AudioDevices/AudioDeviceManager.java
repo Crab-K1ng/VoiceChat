@@ -20,6 +20,20 @@ public class AudioDeviceManager {
         }
     };
 
+    public static void applyVolume(byte[] audio, float volume) {
+        for (int i = 0; i < audio.length; i += 2) {
+            short sample = (short) ((audio[i + 1] << 8) | (audio[i] & 0xFF));
+            int scaledSample = (int) (sample * volume);
+
+            // Clamp to 16-bit range to avoid overflow distortion
+            if (scaledSample > Short.MAX_VALUE) scaledSample = Short.MAX_VALUE;
+            if (scaledSample < Short.MIN_VALUE) scaledSample = Short.MIN_VALUE;
+
+            audio[i] = (byte) (scaledSample & 0xFF);
+            audio[i + 1] = (byte) ((scaledSample >> 8) & 0xFF);
+        }
+    }
+
     private static SourceDataLine speakers;
     private static TargetDataLine microphone;
     private static boolean isMicrophoneOn;
