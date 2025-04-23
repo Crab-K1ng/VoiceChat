@@ -14,8 +14,8 @@ public class AudioDeviceManager {
     public static void init(){
         openMicrophone();
         openSpeaker();
-        ThreadsManger.initSpeakersThread();
         ThreadsManger.initMicrophoneThread();
+        ThreadsManger.initSpeakersThread();
     }
 
     public static void toggleMic() {
@@ -74,11 +74,11 @@ public class AudioDeviceManager {
         return microphone;
     }
 
-    public static boolean isIsMicrophoneOn() {
+    public static boolean isMicrophoneOn() {
         return isMicrophoneOn;
     }
 
-    public static boolean isIsSpeakerOn() {
+    public static boolean isSpeakerOn() {
         return isSpeakerOn;
     }
 }

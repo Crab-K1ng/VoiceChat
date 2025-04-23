@@ -5,7 +5,7 @@
   "name": "${mod_name}",
   "description": "${description}",
   "authors": [
-    "${mod_developer}"
+    "Spicylemon", "CrabKing", "Mr-Zombii", "repletsin5"
   ],
   "meta": {
     "icon": "${mod_id}:icons/icon.png"

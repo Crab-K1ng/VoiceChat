@@ -23,7 +23,7 @@ public class SpeakersThread implements Runnable {
     @Override
     public void run() {
         try{
-            while (AudioDeviceManager.isIsSpeakerOn()){
+            while (AudioDeviceManager.isSpeakerOn()){
                 isRunning = true;
                 if (decoder == null){
                     try {
