@@ -7,7 +7,7 @@ import io.github.CrabK1ng.Proximity.threads.ThreadsManger;
 import javax.sound.sampled.*;
 
 public class AudioDeviceManager {
-    private static float micVolumeFloat = 0f;
+    private static float micVolumeFloat = 1f;
     public static INumberSetting micVolume = new INumberSetting() {
         @Override
         public float getValueAsFloat() {
@@ -17,6 +17,19 @@ public class AudioDeviceManager {
         @Override
         public void setValue(float v) {
             micVolumeFloat = v;
+        }
+    };
+
+    private static float spkVolumeFloat = 1f;
+    public static INumberSetting spkVolume = new INumberSetting() {
+        @Override
+        public float getValueAsFloat() {
+            return spkVolumeFloat;
+        }
+
+        @Override
+        public void setValue(float v) {
+            spkVolumeFloat = v;
         }
     };
 

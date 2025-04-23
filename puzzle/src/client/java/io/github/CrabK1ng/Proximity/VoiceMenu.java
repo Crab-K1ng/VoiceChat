@@ -124,16 +124,22 @@ public class VoiceMenu extends GameState implements IGameStateInWorld {
             }
         };
         closeButton.addAction(new AlignXAction(1, 0.5F));
-        closeButton.addAction(new AlignYAction(1, 0.5F, 40.0F));
+        closeButton.addAction(new AlignYAction(1, 0.5F, 100.0F));
         closeButton.setSize(275.0F, 35.0F);
         this.stage.addActor(closeButton);
 
         //mic volume slider
-        CRSlider soundSlider = this.createSettingsCRSlider(AudioDeviceManager.micVolume, "Mic Volume: ", 0.0F, 2.0F, 0.01F, this.percentFormat);
-        soundSlider.addAction(new AlignXAction(1, 0.5F));
-        soundSlider.addAction(new AlignYAction(1, 0.5F, -10.0F));
-        soundSlider.setSize(275.0F, 35.0F);
-        this.stage.addActor(soundSlider);
+        CRSlider micSlider = this.createSettingsCRSlider(AudioDeviceManager.micVolume, "Mic Volume: ", 0.0F, 2.0F, 0.01F, this.percentFormat);
+        micSlider.addAction(new AlignXAction(1, 0.5F));
+        micSlider.addAction(new AlignYAction(1, 0.5F, 50.0F));
+        micSlider.setSize(275.0F, 35.0F);
+        this.stage.addActor(micSlider);
+
+        CRSlider spkSlider = this.createSettingsCRSlider(AudioDeviceManager.spkVolume, "Speaker Volume: ", 0.0F, 2.0F, 0.01F, this.percentFormat);
+        spkSlider.addAction(new AlignXAction(1, 0.5F));
+        spkSlider.addAction(new AlignYAction(1, 0.5F, -10.0F));
+        spkSlider.setSize(275.0F, 35.0F);
+        this.stage.addActor(spkSlider);
 
 
         //mic button
