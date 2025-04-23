@@ -6,7 +6,6 @@
   "mixins": [
   ],
   "server": [
-    "ServerLauncherMixin"
   ],
   "injectors": {
     "defaultRequire": 1

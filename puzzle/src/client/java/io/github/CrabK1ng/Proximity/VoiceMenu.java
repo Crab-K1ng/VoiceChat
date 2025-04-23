@@ -32,7 +32,7 @@ import finalforeach.cosmicreach.ui.widgets.CRSlider;
 
 import java.text.NumberFormat;
 
-import static io.github.CrabK1ng.Proximity.Proximity.lineOpen;
+//import static io.github.CrabK1ng.Proximity.Proximity.lineOpen;
 
 public class VoiceMenu extends GameState implements IGameStateInWorld {
     final String on = Lang.get("on_state");
@@ -126,24 +126,24 @@ public class VoiceMenu extends GameState implements IGameStateInWorld {
         this.stage.addActor(closeButton);
 
         //mic volume slider
-        CRSlider soundSlider = this.createSettingsCRSlider(Proximity.micVolume, "Mic Volume: ", 0.0F, 2.0F, 0.01F, this.percentFormat);
-        soundSlider.addAction(new AlignXAction(1, 0.5F));
-        soundSlider.addAction(new AlignYAction(1, 0.5F, -10.0F));
-        soundSlider.setSize(275.0F, 35.0F);
-        this.stage.addActor(soundSlider);
+//        CRSlider soundSlider = this.createSettingsCRSlider(Proximity.micVolume, "Mic Volume: ", 0.0F, 2.0F, 0.01F, this.percentFormat);
+//        soundSlider.addAction(new AlignXAction(1, 0.5F));
+//        soundSlider.addAction(new AlignYAction(1, 0.5F, -10.0F));
+//        soundSlider.setSize(275.0F, 35.0F);
+//        this.stage.addActor(soundSlider);
 
 
         //mic button
         CRButton micButton = new CRButton() {
             public void onClick() {
                 super.onClick();
-                Proximity.toggleMic();
+//                Proximity.toggleMic();
                 this.updateText();
             }
 
             public void updateText() {
                 String string = "Mic: "/*Lang.get("difficultyButton")*/;
-                this.setText(string + ((lineOpen) ? VoiceMenu.this.on : VoiceMenu.this.off));
+//                this.setText(string + ((lineOpen) ? VoiceMenu.this.on : VoiceMenu.this.off));
             }
         };
 
@@ -159,13 +159,13 @@ public class VoiceMenu extends GameState implements IGameStateInWorld {
         CRButton iconButton = new CRButton("iconButton") {
             public void onClick() {
                 super.onClick();
-                Proximity.toggleIcon();
+//                Proximity.toggleIcon();
                 this.updateText();
             }
 
             public void updateText() {
                 String string = "Icon: "/*Lang.get("difficultyButton")*/;
-                this.setText(string + ((Proximity.drawIcon) ? VoiceMenu.this.on : VoiceMenu.this.off));
+//                this.setText(string + ((Proximity.drawIcon) ? VoiceMenu.this.on : VoiceMenu.this.off));
             }
         };
         iconButton.onClick();
@@ -200,7 +200,7 @@ public class VoiceMenu extends GameState implements IGameStateInWorld {
         super.render();
         if (!this.firstFrame && Gdx.input.isKeyJustPressed(111)) {
             TickRunner.INSTANCE.continueTickThread();
-            Proximity.toggleMenu();
+//            Proximity.toggleMenu();
             switchToGameState(IN_GAME);
         }
 

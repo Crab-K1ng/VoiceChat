@@ -19,7 +19,7 @@ public abstract class BlockGameMixin {
     @Inject(method = "render", at = @At("HEAD"))            //// Control hooking
     public void onKey(CallbackInfo ci) {
         if (toggleMute.isJustPressed() && currentGameState instanceof InGame) {
-            Proximity.toggleMic();
+//            Proximity.toggleMic();
         }
         if (openVoiceMenu.isJustPressed()) {
             if (currentGameState instanceof VoiceMenu) {

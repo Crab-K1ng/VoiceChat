@@ -19,25 +19,25 @@ public abstract class UIMixin {
 
     @Inject(method = "render", at = @At("HEAD"))
     private void drawIcon(CallbackInfo ci) {
-        if (UI.renderUI && Proximity.drawIcon) {
-            //texture loading
-            Texture micOn = GameTexture.load("proximity:mic.png").get();
-            Texture micOff = GameTexture.load("proximity:mic_off.png").get();
-
-            //swapping to correct texture
-            Sprite statusIcon = new Sprite(micOn);
-            if (!Proximity.lineOpen) {statusIcon.setTexture(micOff);}
-
-            //set positions
-            statusIcon.flip(false,true);
-            statusIcon.setPosition(-uiViewport.getWorldWidth()/2+3, (uiViewport.getWorldHeight()/2) -32 -3);
-
-            //drawing to screen
-            UI.batch.setProjectionMatrix(this.uiViewport.getCamera().combined);
-            UI.batch.begin();
-            Proximity.initText();
-            statusIcon.draw(UI.batch);
-            UI.batch.end();
-        }
+//        if (UI.renderUI && Proximity.drawIcon) {
+//            texture loading
+//            Texture micOn = GameTexture.load("proximity:mic.png").get();
+//            Texture micOff = GameTexture.load("proximity:mic_off.png").get();
+//
+//            swapping to correct texture
+//            Sprite statusIcon = new Sprite(micOn);
+//            if (!Proximity.lineOpen) {statusIcon.setTexture(micOff);}
+//
+//            set positions
+//            statusIcon.flip(false,true);
+//            statusIcon.setPosition(-uiViewport.getWorldWidth()/2+3, (uiViewport.getWorldHeight()/2) -32 -3);
+//
+//            drawing to screen
+//            UI.batch.setProjectionMatrix(this.uiViewport.getCamera().combined);
+//            UI.batch.begin();
+//            Proximity.initText();
+//            statusIcon.draw(UI.batch);
+//            UI.batch.end();
+//        }
     }
 }

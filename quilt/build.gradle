@@ -3,9 +3,9 @@ plugins {
 }
 
 
-loom {
-    accessWidenerPath = file("src/main/resources/${mod_id}.accesswidener")
-}
+//loom {
+//    accessWidenerPath = file("src/main/resources/${mod_id}.accesswidener")
+//}
 
 
 repositories {
