@@ -19,7 +19,7 @@ public abstract class BlockGameMixin {
 
         /**
      * <h3>Control hooking</h3>
-     * <p>Injects into {@link finalforeach.cosmicreach.BlockGame#render() render()}  in {@link BlockGame} to check what keys are pressed</p>
+     * <p>Injects into {@link finalforeach.cosmicreach.BlockGame#render()}  to check what keys are pressed</p>
      * @param ci Callback info for mixin
      */
 

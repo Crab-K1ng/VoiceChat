@@ -18,6 +18,12 @@ public abstract class UIMixin {
     @Shadow
     private Viewport uiViewport;
 
+    /**
+     * <h3>Drawing mic icon</h3>
+     * <p>Injects into {@link UI#render()} to draw the microphone icon</p>
+     * @param ci Callback info for mixin
+     */
+
     @Inject(method = "render", at = @At("HEAD"))
     private void drawIcon(CallbackInfo ci) {
         if (UI.renderUI && VoiceMenu.drawIcon) {
