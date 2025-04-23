@@ -4,8 +4,6 @@ import finalforeach.cosmicreach.Threads;
 import finalforeach.cosmicreach.networking.client.ClientNetworkManager;
 import finalforeach.cosmicreach.networking.client.netty.NettyClient;
 import finalforeach.cosmicreach.util.logging.Logger;
-import io.github.CrabK1ng.Proximity.networking.AudioClientManager;
-import io.github.CrabK1ng.Proximity.networking.AudioClientSender;
 import org.spongepowered.asm.mixin.Implements;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,6 +17,6 @@ public class ClientNetworkManagerMixin {
 
     @Inject(method = "connectToServer", at = @At("TAIL"))
     private static void connectToServer(String address, Runnable onConnect, Consumer<Throwable> onFailure, CallbackInfo ci) {
-        AudioClientManager.connectToServer(address);
+//        AudioClientManager.connectToServer(address);
     }
 }

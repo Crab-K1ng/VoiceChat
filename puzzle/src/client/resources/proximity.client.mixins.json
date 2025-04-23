@@ -8,7 +8,6 @@
     "ClientNetworkManagerMixin"
   ],
   "client": [
-    "InGameMixin",
     "KeybindingMenuMixin",
     "UIMixin"
   ],

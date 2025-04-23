@@ -1,9 +1,6 @@
 package io.github.CrabK1ng.Proximity.Utils;
 
-import finalforeach.cosmicreach.savelib.IByteArray;
-import io.netty.buffer.ByteBuf;
-
-public class Utils {
+public class BytesUtils {
 
     public static short[] bytesToShorts(byte[] bytes) {
         if (bytes.length % 2 != 0) {

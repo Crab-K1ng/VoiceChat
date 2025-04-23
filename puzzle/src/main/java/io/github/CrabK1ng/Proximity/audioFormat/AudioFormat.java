@@ -1,10 +1,8 @@
-package io.github.CrabK1ng.Proximity;
+package io.github.CrabK1ng.Proximity.audioFormat;
 
-import javax.sound.sampled.AudioFormat;
+public class AudioFormat {
 
-public class AudioSetting {
-
-    private static AudioFormat.Encoding encoding = AudioFormat.Encoding.PCM_SIGNED;
+    private static javax.sound.sampled.AudioFormat.Encoding encoding = javax.sound.sampled.AudioFormat.Encoding.PCM_SIGNED;
     private static int sampleRate = 8000; //48000
     private static int sampleSizeInBits = 16;
     private static int channels = 1; // Mono (1) or Stereo (2)
@@ -17,21 +15,21 @@ public class AudioSetting {
     // use this of Buffers
     private static int samplesPerBuffer = 160;
 
-    private static AudioFormat format;
+    private static javax.sound.sampled.AudioFormat format;
 
     public static void init(){
         int bytesPerSample = sampleSizeInBits / 8;
         bytesPerFrame = bytesPerSample * channels;
 
-        format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 48000, 16, 1, 2, 48000, false);
+        format = new javax.sound.sampled.AudioFormat(javax.sound.sampled.AudioFormat.Encoding.PCM_SIGNED, 48000, 16, 1, 2, 48000, false);
     }
 
-    public static AudioFormat.Encoding getEncoding() {
+    public static javax.sound.sampled.AudioFormat.Encoding getEncoding() {
         return encoding;
     }
 
-    public static void setEncoding(AudioFormat.Encoding encoding) {
-        AudioSetting.encoding = encoding;
+    public static void setEncoding(javax.sound.sampled.AudioFormat.Encoding encoding) {
+        AudioFormat.encoding = encoding;
     }
 
     public static int getSampleRate() {
@@ -39,7 +37,7 @@ public class AudioSetting {
     }
 
     public static void setSampleRate(int sampleRate) {
-        AudioSetting.sampleRate = sampleRate;
+        AudioFormat.sampleRate = sampleRate;
     }
 
     public static int getSampleSizeInBits() {
@@ -47,7 +45,7 @@ public class AudioSetting {
     }
 
     public static void setSampleSizeInBits(int sampleSizeInBits) {
-        AudioSetting.sampleSizeInBits = sampleSizeInBits;
+        AudioFormat.sampleSizeInBits = sampleSizeInBits;
     }
 
     public static int getChannels() {
@@ -55,7 +53,7 @@ public class AudioSetting {
     }
 
     public static void setChannels(int channels) {
-        AudioSetting.channels = channels;
+        AudioFormat.channels = channels;
     }
 
     public static int getFrameRate() {
@@ -63,7 +61,7 @@ public class AudioSetting {
     }
 
     public static void setFrameRate(int frameRate) {
-        AudioSetting.frameRate = frameRate;
+        AudioFormat.frameRate = frameRate;
     }
 
     public static boolean isBigEndian() {
@@ -71,7 +69,7 @@ public class AudioSetting {
     }
 
     public static void setBigEndian(boolean bigEndian) {
-        AudioSetting.bigEndian = bigEndian;
+        AudioFormat.bigEndian = bigEndian;
     }
 
     public static int getBytesPerFrame() {
@@ -79,7 +77,7 @@ public class AudioSetting {
     }
 
     public static void setBytesPerFrame(int bytesPerFrame) {
-        AudioSetting.bytesPerFrame = bytesPerFrame;
+        AudioFormat.bytesPerFrame = bytesPerFrame;
     }
 
     public static int getSamplesPerBuffer() {
@@ -87,14 +85,14 @@ public class AudioSetting {
     }
 
     public static void setSamplesPerBuffer(int samplesPerBuffer) {
-        AudioSetting.samplesPerBuffer = samplesPerBuffer;
+        AudioFormat.samplesPerBuffer = samplesPerBuffer;
     }
 
-    public static AudioFormat getFormat() {
+    public static javax.sound.sampled.AudioFormat getFormat() {
         return format;
     }
 
-    public static void setFormat(AudioFormat format) {
-        AudioSetting.format = format;
+    public static void setFormat(javax.sound.sampled.AudioFormat format) {
+        AudioFormat.format = format;
     }
 }
