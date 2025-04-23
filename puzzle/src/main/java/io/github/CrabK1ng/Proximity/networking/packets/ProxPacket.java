@@ -30,7 +30,7 @@ public abstract class ProxPacket {
     }
 
     public static void register() {
-        register(0, MessagePacket.class);
+        register(0, AudioPacket.class);
     }
 
 }

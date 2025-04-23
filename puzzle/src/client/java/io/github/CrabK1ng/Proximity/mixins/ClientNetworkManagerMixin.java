@@ -14,7 +14,6 @@ public class ClientNetworkManagerMixin {
 
     @Inject(method = "connectToServer", at = @At("TAIL"))
     private static void connectToServer(String address, Runnable onConnect, Consumer<Throwable> onFailure, CallbackInfo ci) {
-//        AudioClientManager.connectToServer(address);
         String ip;
         int port;
         if (address.contains(":")) {

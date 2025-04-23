@@ -1,5 +1,7 @@
 package io.github.CrabK1ng.Proximity.serialization;
 
+import com.badlogic.gdx.math.Vector3;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -155,6 +157,13 @@ public class KeylessBinarySerializer implements IKeylessSerializer {
         for (T obj : array) {
             writeCustomObject(obj);
         }
+    }
+
+    @Override
+    public void writeVector3(Vector3 vector3) throws IOException {
+        this.writeFloat(vector3.x);
+        this.writeFloat(vector3.y);
+        this.writeFloat(vector3.z);
     }
 
     public byte[] toBytes() {

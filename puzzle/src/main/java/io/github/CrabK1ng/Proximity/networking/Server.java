@@ -1,6 +1,6 @@
 package io.github.CrabK1ng.Proximity.networking;
 
-import io.github.CrabK1ng.Proximity.Utils.FixedArray;
+import io.github.CrabK1ng.Proximity.utils.FixedArray;
 import io.github.CrabK1ng.Proximity.networking.packets.ProxPacket;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;

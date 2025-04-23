@@ -1,5 +1,7 @@
 package io.github.CrabK1ng.Proximity.serialization;
 
+import com.badlogic.gdx.math.Vector3;
+
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.EOFException;
@@ -167,6 +169,15 @@ public class KeylessBinaryDeserializer implements IKeylessDeserializer {
     @Override
     public String[] readStringArray() throws IOException {
         return readArray(String[]::new, input::readUTF);
+    }
+
+    @Override
+    public Vector3 readVector3() throws IOException {
+        Vector3 vector3 = new Vector3();
+        vector3.x = this.readFloat();
+        vector3.y = this.readFloat();
+        vector3.z = this.readFloat();
+        return vector3;
     }
 
     @Override

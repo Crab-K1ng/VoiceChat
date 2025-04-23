@@ -1,7 +1,7 @@
 package io.github.CrabK1ng.Proximity.opus;
 
 import de.maxhenkel.opus4j.OpusDecoder;
-import io.github.CrabK1ng.Proximity.Utils.BytesUtils;
+import io.github.CrabK1ng.Proximity.utils.BytesUtils;
 
 public class OpusDecoderHandler {
     private OpusDecoder decoder;

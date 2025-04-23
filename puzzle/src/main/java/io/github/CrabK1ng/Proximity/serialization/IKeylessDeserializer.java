@@ -1,5 +1,7 @@
 package io.github.CrabK1ng.Proximity.serialization;
 
+import com.badlogic.gdx.math.Vector3;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Arrays;
@@ -299,6 +301,11 @@ public interface IKeylessDeserializer {
     default List<String> readStringArrayAsList() throws IOException {
         return Arrays.asList(readStringArray());
     }
+
+    /**
+     * Reads a single Vector3.
+     */
+    Vector3 readVector3() throws IOException;
 
     /**
      * Reads a single raw-object.

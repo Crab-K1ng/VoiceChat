@@ -1,5 +1,6 @@
 package io.github.CrabK1ng.Proximity.serialization;
 
+import com.badlogic.gdx.math.Vector3;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
@@ -371,6 +372,12 @@ public interface IKeylessSerializer {
     default <T> void writeCustomObjectList(@NotNull List<T> list) throws IOException {
         writeCustomObjectArray(list.toArray(new Object[0]));
     }
+
+    /**
+     * Writes a vector3 to the serializer.
+     * @param vector3 The vector3 to be written.
+     */
+    void writeVector3(Vector3 vector3) throws IOException;
 
     /**
      * Creates a primitive byte array from the serialized data.

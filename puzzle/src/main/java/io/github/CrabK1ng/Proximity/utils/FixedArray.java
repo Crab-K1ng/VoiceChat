@@ -1,4 +1,4 @@
-package io.github.CrabK1ng.Proximity.Utils;
+package io.github.CrabK1ng.Proximity.utils;
 
 import org.jetbrains.annotations.Nullable;
 
