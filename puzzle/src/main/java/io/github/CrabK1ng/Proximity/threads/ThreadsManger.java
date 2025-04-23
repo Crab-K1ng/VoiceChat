@@ -1,5 +1,7 @@
 package io.github.CrabK1ng.Proximity.threads;
 
+import finalforeach.cosmicreach.Threads;
+
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -9,13 +11,11 @@ public class ThreadsManger {
 
     public static void initSpeakersThread(){
         speakersThread = new SpeakersThread();
-        Thread thread = new Thread(speakersThread);
-        thread.start();
+        Threads.createThread("speakersThread", speakersThread);
     }
 
     public static void initMicrophoneThread(){
         microphoneThread = new MicrophoneThread();
-        Thread thread = new Thread(microphoneThread);
-        thread.start();
+        Threads.createThread("microphoneThread", microphoneThread);
     }
 }
