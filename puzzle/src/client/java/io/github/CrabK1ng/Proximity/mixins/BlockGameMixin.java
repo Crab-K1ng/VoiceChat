@@ -3,7 +3,7 @@ package io.github.CrabK1ng.Proximity.mixins;
 import finalforeach.cosmicreach.BlockGame;
 import finalforeach.cosmicreach.gamestates.GameState;
 import finalforeach.cosmicreach.gamestates.InGame;
-import io.github.CrabK1ng.Proximity.Proximity;
+import io.github.CrabK1ng.Proximity.AudioDevices.AudioDeviceManager;
 import io.github.CrabK1ng.Proximity.VoiceMenu;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,10 +16,17 @@ import static io.github.CrabK1ng.Proximity.ProximityControls.toggleMute;
 
 @Mixin(BlockGame.class)
 public abstract class BlockGameMixin {
-    @Inject(method = "render", at = @At("HEAD"))            //// Control hooking
+
+        /**
+     * <h3>Control hooking</h3>
+     * <p>Injects into {@link finalforeach.cosmicreach.BlockGame#render() render()}  in {@link BlockGame} to check what keys are pressed</p>
+     * @param ci Callback info for mixin
+     */
+
+    @Inject(method = "render", at = @At("HEAD"))
     public void onKey(CallbackInfo ci) {
         if (toggleMute.isJustPressed() && currentGameState instanceof InGame) {
-//            Proximity.toggleMic();
+            AudioDeviceManager.toggleMic();
         }
         if (openVoiceMenu.isJustPressed()) {
             if (currentGameState instanceof VoiceMenu) {

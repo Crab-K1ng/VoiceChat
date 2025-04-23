@@ -1,11 +1,25 @@
 package io.github.CrabK1ng.Proximity.AudioDevices;
 
+import finalforeach.cosmicreach.settings.INumberSetting;
 import io.github.CrabK1ng.Proximity.audioFormat.AudioFormat;
 import io.github.CrabK1ng.Proximity.threads.ThreadsManger;
 
 import javax.sound.sampled.*;
 
 public class AudioDeviceManager {
+    private static float micVolumeFloat = 0f;
+    public static INumberSetting micVolume = new INumberSetting() {
+        @Override
+        public float getValueAsFloat() {
+            return micVolumeFloat;
+        }
+
+        @Override
+        public void setValue(float v) {
+            micVolumeFloat = v;
+        }
+    };
+
     private static SourceDataLine speakers;
     private static TargetDataLine microphone;
     private static boolean isMicrophoneOn;
