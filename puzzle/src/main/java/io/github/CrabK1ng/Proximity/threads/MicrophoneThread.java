@@ -1,5 +1,6 @@
 package io.github.CrabK1ng.Proximity.threads;
 
+import com.badlogic.gdx.math.Vector3;
 import finalforeach.cosmicreach.GameSingletons;
 import io.github.CrabK1ng.Proximity.AudioDevices.AudioDeviceManager;
 import io.github.CrabK1ng.Proximity.audioFormat.AudioFormat;
@@ -41,12 +42,11 @@ public class MicrophoneThread implements Runnable {
                     byte[] opusBuffer = encoder.encode(byteBuffer);
                     if (Client.context != null){
                         try {
-                            Client.send(new AudioPacket(GameSingletons.client().getAccount().getUniqueId(), opusBuffer, GameSingletons.client().getLocalPlayer().getPosition()));
+                            Client.send(new AudioPacket(GameSingletons.client().getAccount().getUniqueId(), opusBuffer.clone(), new Vector3()));
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
                     }
-                    Thread.sleep(10);
                     i++;
                 }
                 i = 0;
