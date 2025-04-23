@@ -1,34 +1,24 @@
 package io.github.CrabK1ng.Proximity;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ScreenUtils;
-import finalforeach.cosmicreach.BlockGame;
 import finalforeach.cosmicreach.ClientZoneLoader;
 import finalforeach.cosmicreach.TickRunner;
-import finalforeach.cosmicreach.gamestates.*;
-import finalforeach.cosmicreach.io.ChunkSaver;
+import finalforeach.cosmicreach.gamestates.GameState;
+import finalforeach.cosmicreach.gamestates.IGameStateInWorld;
 import finalforeach.cosmicreach.lang.Lang;
-import finalforeach.cosmicreach.rendering.shaders.SpriteBatchShader;
 import finalforeach.cosmicreach.settings.GraphicsSettings;
 import finalforeach.cosmicreach.settings.INumberSetting;
 import finalforeach.cosmicreach.settings.types.IntSetting;
-import finalforeach.cosmicreach.ui.FontRenderer;
-import finalforeach.cosmicreach.ui.GameStyles;
-import finalforeach.cosmicreach.ui.HorizontalAnchor;
-import finalforeach.cosmicreach.ui.VerticalAnchor;
 import finalforeach.cosmicreach.ui.actions.AlignXAction;
 import finalforeach.cosmicreach.ui.actions.AlignYAction;
-import finalforeach.cosmicreach.ui.screens.CustomScreen;
 import finalforeach.cosmicreach.ui.widgets.CRButton;
 import finalforeach.cosmicreach.ui.widgets.CRSlider;
+import io.github.CrabK1ng.Proximity.AudioDevices.AudioDeviceManager;
+import org.lwjgl.opengl.GL20;
 
 import java.text.NumberFormat;
 
@@ -38,8 +28,16 @@ public class VoiceMenu extends GameState implements IGameStateInWorld {
     final String on = Lang.get("on_state");
     final String off = Lang.get("off_state");
 
-    ProgressBar.ProgressBarStyle style = new ProgressBar.ProgressBarStyle();
-    NinePatch bg9Patch = GameStyles.containerBackground9Patch;
+    public static boolean drawIcon = true;
+    public static void toggleIcon() {
+        drawIcon = !drawIcon;
+    }
+
+    /**
+     * Thanks to pietru
+     */
+//    ProgressBar.ProgressBarStyle style = new ProgressBar.ProgressBarStyle();
+//    NinePatch bg9Patch = GameStyles.containerBackground9Patch;
 //    style.background = new NinePatchDrawable(bg9Patch);
 //    style.background.setLeftWidth(0.0F);
 //    style.background.setRightWidth(0.0F);style.background.setBottomHeight(0.0F);
@@ -53,6 +51,11 @@ public class VoiceMenu extends GameState implements IGameStateInWorld {
 
     boolean cursorCaught;
     private final NumberFormat percentFormat = Lang.getPercentFormatter();
+
+    public static void initText() {
+        Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
+        Gdx.gl.glBindTexture(GL20.GL_TEXTURE_2D, 0);
+    }
 
     @Override
     public void onSwitchTo()
@@ -121,29 +124,35 @@ public class VoiceMenu extends GameState implements IGameStateInWorld {
             }
         };
         closeButton.addAction(new AlignXAction(1, 0.5F));
-        closeButton.addAction(new AlignYAction(1, 0.5F, 40.0F));
+        closeButton.addAction(new AlignYAction(1, 0.5F, 100.0F));
         closeButton.setSize(275.0F, 35.0F);
         this.stage.addActor(closeButton);
 
         //mic volume slider
-//        CRSlider soundSlider = this.createSettingsCRSlider(Proximity.micVolume, "Mic Volume: ", 0.0F, 2.0F, 0.01F, this.percentFormat);
-//        soundSlider.addAction(new AlignXAction(1, 0.5F));
-//        soundSlider.addAction(new AlignYAction(1, 0.5F, -10.0F));
-//        soundSlider.setSize(275.0F, 35.0F);
-//        this.stage.addActor(soundSlider);
+        CRSlider micSlider = this.createSettingsCRSlider(AudioDeviceManager.micVolume, "Mic Volume: ", 0.0F, 2.0F, 0.01F, this.percentFormat);
+        micSlider.addAction(new AlignXAction(1, 0.5F));
+        micSlider.addAction(new AlignYAction(1, 0.5F, 50.0F));
+        micSlider.setSize(275.0F, 35.0F);
+        this.stage.addActor(micSlider);
+
+        CRSlider spkSlider = this.createSettingsCRSlider(AudioDeviceManager.spkVolume, "Speaker Volume: ", 0.0F, 2.0F, 0.01F, this.percentFormat);
+        spkSlider.addAction(new AlignXAction(1, 0.5F));
+        spkSlider.addAction(new AlignYAction(1, 0.5F, -10.0F));
+        spkSlider.setSize(275.0F, 35.0F);
+        this.stage.addActor(spkSlider);
 
 
         //mic button
         CRButton micButton = new CRButton() {
             public void onClick() {
                 super.onClick();
-//                Proximity.toggleMic();
+                AudioDeviceManager.toggleMic();
                 this.updateText();
             }
 
             public void updateText() {
                 String string = "Mic: "/*Lang.get("difficultyButton")*/;
-//                this.setText(string + ((lineOpen) ? VoiceMenu.this.on : VoiceMenu.this.off));
+                this.setText(string + ((AudioDeviceManager.isMicrophoneOn()) ? VoiceMenu.this.on : VoiceMenu.this.off));
             }
         };
 
@@ -159,13 +168,13 @@ public class VoiceMenu extends GameState implements IGameStateInWorld {
         CRButton iconButton = new CRButton("iconButton") {
             public void onClick() {
                 super.onClick();
-//                Proximity.toggleIcon();
+                VoiceMenu.toggleIcon();
                 this.updateText();
             }
 
             public void updateText() {
                 String string = "Icon: "/*Lang.get("difficultyButton")*/;
-//                this.setText(string + ((Proximity.drawIcon) ? VoiceMenu.this.on : VoiceMenu.this.off));
+                this.setText(string + ((VoiceMenu.drawIcon) ? VoiceMenu.this.on : VoiceMenu.this.off));
             }
         };
         iconButton.onClick();
@@ -200,7 +209,6 @@ public class VoiceMenu extends GameState implements IGameStateInWorld {
         super.render();
         if (!this.firstFrame && Gdx.input.isKeyJustPressed(111)) {
             TickRunner.INSTANCE.continueTickThread();
-//            Proximity.toggleMenu();
             switchToGameState(IN_GAME);
         }
 

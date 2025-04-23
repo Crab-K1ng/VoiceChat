@@ -46,7 +46,7 @@ public class PacketHandler extends ChannelInboundHandlerAdapter {
 
             short id = m.readShort();
             Class<? extends ProxPacket> packetClass = ProxPacket.PACKET_MAP.get((Short) id);
-            System.out.println("Packet Recieved " + id);
+            System.out.println("Packet Received " + id);
             if (packetClass == null) return;
 
             ProxPacket packet = packetClass.newInstance();

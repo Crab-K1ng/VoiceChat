@@ -39,6 +39,8 @@ public class SpeakersThread implements Runnable {
                     byte[] buffer = audioQueue.take();
 
                     byte[] opusBuffer = decoder.decode(buffer);
+
+                    AudioDeviceManager.applyVolume(opusBuffer, AudioDeviceManager.spkVolume.getValueAsFloat());
                     AudioDeviceManager.getSpeakers().write(opusBuffer, 0, opusBuffer.length);
                     i++;
                 }

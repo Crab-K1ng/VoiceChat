@@ -6,12 +6,9 @@ import io.github.CrabK1ng.Proximity.AudioDevices.AudioDeviceManager;
 import io.github.CrabK1ng.Proximity.audioFormat.AudioFormat;
 import io.github.CrabK1ng.Proximity.networking.Client;
 import io.github.CrabK1ng.Proximity.networking.packets.AudioPacket;
-import io.github.CrabK1ng.Proximity.opus.OpusDecoderHandler;
 import io.github.CrabK1ng.Proximity.opus.OpusEncoderHandler;
 
 import java.io.IOException;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 
 public class MicrophoneThread implements Runnable {
     byte[] byteBuffer = new byte[AudioFormat.getSamplesPerBuffer() * AudioFormat.getChannels()];
@@ -38,6 +35,7 @@ public class MicrophoneThread implements Runnable {
                 int i = 0;
                 while (i < 10000){
                     AudioDeviceManager.getMicrophone().read(byteBuffer, 0, byteBuffer.length);
+                    AudioDeviceManager.applyVolume(byteBuffer, AudioDeviceManager.micVolume.getValueAsFloat());
 
                     byte[] opusBuffer = encoder.encode(byteBuffer);
                     if (Client.context != null){

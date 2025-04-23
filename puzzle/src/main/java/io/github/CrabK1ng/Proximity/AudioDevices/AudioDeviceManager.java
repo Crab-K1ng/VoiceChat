@@ -1,11 +1,52 @@
 package io.github.CrabK1ng.Proximity.AudioDevices;
 
+import finalforeach.cosmicreach.settings.INumberSetting;
 import io.github.CrabK1ng.Proximity.audioFormat.AudioFormat;
 import io.github.CrabK1ng.Proximity.threads.ThreadsManger;
 
 import javax.sound.sampled.*;
 
 public class AudioDeviceManager {
+    private static float micVolumeFloat = 1f;
+    public static INumberSetting micVolume = new INumberSetting() {
+        @Override
+        public float getValueAsFloat() {
+            return micVolumeFloat;
+        }
+
+        @Override
+        public void setValue(float v) {
+            micVolumeFloat = v;
+        }
+    };
+
+    private static float spkVolumeFloat = 1f;
+    public static INumberSetting spkVolume = new INumberSetting() {
+        @Override
+        public float getValueAsFloat() {
+            return spkVolumeFloat;
+        }
+
+        @Override
+        public void setValue(float v) {
+            spkVolumeFloat = v;
+        }
+    };
+
+    public static void applyVolume(byte[] audio, float volume) {
+        for (int i = 0; i < audio.length; i += 2) {
+            short sample = (short) ((audio[i + 1] << 8) | (audio[i] & 0xFF));
+            int scaledSample = (int) (sample * volume);
+
+            // Clamp to 16-bit range to avoid overflow distortion
+            if (scaledSample > Short.MAX_VALUE) scaledSample = Short.MAX_VALUE;
+            if (scaledSample < Short.MIN_VALUE) scaledSample = Short.MIN_VALUE;
+
+            audio[i] = (byte) (scaledSample & 0xFF);
+            audio[i + 1] = (byte) ((scaledSample >> 8) & 0xFF);
+        }
+    }
+
     private static SourceDataLine speakers;
     private static TargetDataLine microphone;
     private static boolean isMicrophoneOn;

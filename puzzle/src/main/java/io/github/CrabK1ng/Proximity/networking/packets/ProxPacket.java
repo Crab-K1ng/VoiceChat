@@ -19,8 +19,8 @@ public abstract class ProxPacket {
     abstract public void write(IKeylessSerializer serializer) throws IOException;
 
     /**
-     * @param type the Enviornment Client/Server
-     * @param proxNetIdentity WILL be null on client, use Client.context or Client.send
+     * @param type the Environment Client/Server
+     * @param proxNetIdentity WILL be null on client, use {@code Client.context} or {@code Client.send}
      */
     abstract public void handle(EnvType type, @Nullable ProxNetIdentity proxNetIdentity);
 
