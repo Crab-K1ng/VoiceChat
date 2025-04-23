@@ -18,6 +18,7 @@ import finalforeach.cosmicreach.ui.actions.AlignYAction;
 import finalforeach.cosmicreach.ui.widgets.CRButton;
 import finalforeach.cosmicreach.ui.widgets.CRSlider;
 import io.github.CrabK1ng.Proximity.AudioDevices.AudioDeviceManager;
+import org.lwjgl.opengl.GL20;
 
 import java.text.NumberFormat;
 
@@ -50,6 +51,11 @@ public class VoiceMenu extends GameState implements IGameStateInWorld {
 
     boolean cursorCaught;
     private final NumberFormat percentFormat = Lang.getPercentFormatter();
+
+    public static void initText() {
+        Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
+        Gdx.gl.glBindTexture(GL20.GL_TEXTURE_2D, 0);
+    }
 
     @Override
     public void onSwitchTo()
