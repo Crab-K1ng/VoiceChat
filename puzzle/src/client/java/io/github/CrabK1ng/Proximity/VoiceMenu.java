@@ -1,32 +1,23 @@
 package io.github.CrabK1ng.Proximity;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ScreenUtils;
-import finalforeach.cosmicreach.BlockGame;
 import finalforeach.cosmicreach.ClientZoneLoader;
 import finalforeach.cosmicreach.TickRunner;
-import finalforeach.cosmicreach.gamestates.*;
-import finalforeach.cosmicreach.io.ChunkSaver;
+import finalforeach.cosmicreach.gamestates.GameState;
+import finalforeach.cosmicreach.gamestates.IGameStateInWorld;
 import finalforeach.cosmicreach.lang.Lang;
-import finalforeach.cosmicreach.rendering.shaders.SpriteBatchShader;
 import finalforeach.cosmicreach.settings.GraphicsSettings;
 import finalforeach.cosmicreach.settings.INumberSetting;
 import finalforeach.cosmicreach.settings.types.IntSetting;
-import finalforeach.cosmicreach.ui.FontRenderer;
 import finalforeach.cosmicreach.ui.GameStyles;
-import finalforeach.cosmicreach.ui.HorizontalAnchor;
-import finalforeach.cosmicreach.ui.VerticalAnchor;
 import finalforeach.cosmicreach.ui.actions.AlignXAction;
 import finalforeach.cosmicreach.ui.actions.AlignYAction;
-import finalforeach.cosmicreach.ui.screens.CustomScreen;
 import finalforeach.cosmicreach.ui.widgets.CRButton;
 import finalforeach.cosmicreach.ui.widgets.CRSlider;
 
@@ -126,11 +117,11 @@ public class VoiceMenu extends GameState implements IGameStateInWorld {
         this.stage.addActor(closeButton);
 
         //mic volume slider
-//        CRSlider soundSlider = this.createSettingsCRSlider(Proximity.micVolume, "Mic Volume: ", 0.0F, 2.0F, 0.01F, this.percentFormat);
-//        soundSlider.addAction(new AlignXAction(1, 0.5F));
-//        soundSlider.addAction(new AlignYAction(1, 0.5F, -10.0F));
-//        soundSlider.setSize(275.0F, 35.0F);
-//        this.stage.addActor(soundSlider);
+        CRSlider soundSlider = this.createSettingsCRSlider(AudioDeviceManager.micVolume, "Mic Volume: ", 0.0F, 2.0F, 0.01F, this.percentFormat);
+        soundSlider.addAction(new AlignXAction(1, 0.5F));
+        soundSlider.addAction(new AlignYAction(1, 0.5F, -10.0F));
+        soundSlider.setSize(275.0F, 35.0F);
+        this.stage.addActor(soundSlider);
 
 
         //mic button
@@ -200,7 +191,6 @@ public class VoiceMenu extends GameState implements IGameStateInWorld {
         super.render();
         if (!this.firstFrame && Gdx.input.isKeyJustPressed(111)) {
             TickRunner.INSTANCE.continueTickThread();
-//            Proximity.toggleMenu();
             switchToGameState(IN_GAME);
         }
 
