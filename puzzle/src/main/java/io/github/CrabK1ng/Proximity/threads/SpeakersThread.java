@@ -45,6 +45,7 @@ public class SpeakersThread implements Runnable {
                     spkLevel = AudioDeviceManager.computeLevel(opusBuffer);
                     AudioDeviceManager.getSpeakers().write(opusBuffer, 0, opusBuffer.length);
                     i++;
+                    Thread.sleep(0, 10000);
                 }
                 i = 0;
                 isRunning = false;

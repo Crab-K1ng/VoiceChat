@@ -79,14 +79,33 @@ public class AudioDeviceManager {
 
     public static void toggleMic() {
         isMicrophoneOn = !isMicrophoneOn;
-        if (isMicrophoneOn) microphone.start();
-        if (!isMicrophoneOn) microphone.stop();
+        if (isMicrophoneOn) startMicrophone();
+        if (!isMicrophoneOn) stopMicrophone();
     }
 
     public static void toggleSpeaker() {
         isSpeakerOn = !isSpeakerOn;
-        if (isSpeakerOn) speakers.start();
-        if (!isSpeakerOn) speakers.stop();
+        if (isSpeakerOn) startSpeaker();
+        if (!isSpeakerOn) stopSpeaker();
+    }
+
+    public static void startMicrophone(){
+        microphone.start();
+        ThreadsManger.microphoneThread.start();
+    }
+
+    public static void startSpeaker(){
+        speakers.start();
+        ThreadsManger.speakersThread.start();
+    }
+
+    public static void stopMicrophone(){
+        microphone.stop();
+    }
+
+    public static void stopSpeaker(){
+        speakers.stop();
+        ThreadsManger.speakersThread.stop();
     }
 
     public static void openMicrophone(){

@@ -43,8 +43,8 @@ public class AudioPacket extends ProxPacket {
     public void handle(EnvType type, ProxNetIdentity proxNetIdentity) {
         if (buffer != null){
             if (com.github.puzzle.core.Constants.SIDE == EnvType.CLIENT) {
-                ThreadsManger.speakersThread.add(buffer);
-                if (!ThreadsManger.speakersThread.isRunning) ThreadsManger.speakersThread.run();
+                ThreadsManger.speakersRunnable.add(buffer);
+                if (!ThreadsManger.speakersThread.isAlive()) ThreadsManger.speakersThread.start();
             } else {
                 try {
                     Server.send(this);

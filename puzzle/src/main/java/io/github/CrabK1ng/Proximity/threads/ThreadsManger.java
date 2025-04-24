@@ -1,21 +1,22 @@
 package io.github.CrabK1ng.Proximity.threads;
 
 import finalforeach.cosmicreach.Threads;
-
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
+import io.github.CrabK1ng.Proximity.threads.MicrophoneThread;
+import io.github.CrabK1ng.Proximity.threads.SpeakersThread;
 
 public class ThreadsManger {
-    public static SpeakersThread speakersThread;
-    public static MicrophoneThread microphoneThread;
+    public static Thread speakersThread;
+    public static SpeakersThread speakersRunnable;
+    public static Thread microphoneThread;
+    public static MicrophoneThread microphoneRunnable;
 
     public static void initSpeakersThread(){
-        speakersThread = new SpeakersThread();
-        Threads.createThread("speakersThread", speakersThread);
+        speakersRunnable = new SpeakersThread();
+        speakersThread = Threads.createThread("speakersThread", speakersRunnable);
     }
 
     public static void initMicrophoneThread(){
-        microphoneThread = new MicrophoneThread();
-        Threads.createThread("microphoneThread", microphoneThread);
+        microphoneRunnable = new MicrophoneThread();
+        microphoneThread = Threads.createThread("microphoneThread", microphoneRunnable);
     }
 }
