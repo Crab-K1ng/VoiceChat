@@ -47,7 +47,7 @@ public class AudioDeviceManager {
         }
     }
 
-    public static float computeMicLevel(byte[] pcmBytes) {
+    public static float computeLevel(byte[] pcmBytes) {
         int sampleCount = pcmBytes.length / 2;
         double sum = 0.0;
 

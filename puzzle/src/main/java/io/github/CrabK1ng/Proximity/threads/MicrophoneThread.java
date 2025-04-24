@@ -10,13 +10,11 @@ import io.github.CrabK1ng.Proximity.networking.packets.AudioPacket;
 import io.github.CrabK1ng.Proximity.opus.OpusEncoderHandler;
 
 import java.io.IOException;
-import java.util.concurrent.ConcurrentSkipListMap;
 
 public class MicrophoneThread implements Runnable {
     byte[] byteBuffer = new byte[AudioFormat.getSamplesPerBuffer() * AudioFormat.getChannels()];
     OpusEncoderHandler encoder;
     public boolean isRunning;
-
     public static float micLevel = 0;
 
     public MicrophoneThread() {
@@ -46,7 +44,7 @@ public class MicrophoneThread implements Runnable {
                     Constants.LOGGER.info("Applying volume");
                     AudioDeviceManager.applyVolume(byteBuffer, AudioDeviceManager.micVolume.getValueAsFloat());
                     Constants.LOGGER.info("Computing mic level");
-                    micLevel = AudioDeviceManager.computeMicLevel(byteBuffer);
+                    micLevel = AudioDeviceManager.computeLevel(byteBuffer);
 
                     Constants.LOGGER.info("Encoding data");
                     byte[] opusBuffer = encoder.encode(byteBuffer);

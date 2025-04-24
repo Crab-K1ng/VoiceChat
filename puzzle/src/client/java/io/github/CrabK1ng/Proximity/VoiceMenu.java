@@ -27,6 +27,7 @@ import org.lwjgl.opengl.GL20;
 import java.text.NumberFormat;
 
 import static io.github.CrabK1ng.Proximity.threads.MicrophoneThread.micLevel;
+import static io.github.CrabK1ng.Proximity.threads.SpeakersThread.spkLevel;
 
 //import static io.github.CrabK1ng.Proximity.Proximity.lineOpen;
 
@@ -45,7 +46,8 @@ public class VoiceMenu extends GameState implements IGameStateInWorld {
 
     Texture empty = GameTexture.load("proximity:ui/empty.png").get();
     Texture full = GameTexture.load("proximity:ui/full.png").get();
-    ProgressArrowTexture volumeBar = new ProgressArrowTexture(empty,full, Orientation2D.RIGHT);
+    ProgressArrowTexture micVolumeBar = new ProgressArrowTexture(empty,full, Orientation2D.RIGHT);
+    ProgressArrowTexture spkVolumeBar = new ProgressArrowTexture(empty,full, Orientation2D.RIGHT);
 
     boolean cursorCaught;
     private final NumberFormat percentFormat = Lang.getPercentFormatter();
@@ -127,10 +129,15 @@ public class VoiceMenu extends GameState implements IGameStateInWorld {
         this.stage.addActor(closeButton);
 
         //volume progress bar
-        volumeBar.addAction(new AlignXAction(1, 0.5F));
-        volumeBar.addAction(new AlignYAction(1, 0.5F, 23.5F));
-        volumeBar.setSize(275F, 3.0F);
-        this.stage.addActor(volumeBar);
+        micVolumeBar.addAction(new AlignXAction(1, 0.5F));
+        micVolumeBar.addAction(new AlignYAction(1, 0.5F, 23.5F));
+        micVolumeBar.setSize(275F, 3.0F);
+        this.stage.addActor(micVolumeBar);
+
+        spkVolumeBar.addAction(new AlignXAction(1, 0.5F));
+        spkVolumeBar.addAction(new AlignYAction(1, 0.5F, -36.5F));
+        spkVolumeBar.setSize(275F, 3.0F);
+        this.stage.addActor(spkVolumeBar);
 
         //mic volume slider
         CRSlider micSlider = this.createSettingsCRSlider(AudioDeviceManager.micVolume, "Mic Volume: ", 0.0F, 2.0F, 0.01F, this.percentFormat);
@@ -221,7 +228,8 @@ public class VoiceMenu extends GameState implements IGameStateInWorld {
         Gdx.gl.glBlendFunc(770, 771);
         IN_GAME.render();
         Gdx.gl.glCullFace(1028);
-        volumeBar.setProgress(micLevel);
+        micVolumeBar.setProgress(micLevel);
+        spkVolumeBar.setProgress(spkLevel);
         Constants.LOGGER.info("Level: {}", micLevel);
         this.stage.draw();
         Gdx.gl.glEnable(2884);

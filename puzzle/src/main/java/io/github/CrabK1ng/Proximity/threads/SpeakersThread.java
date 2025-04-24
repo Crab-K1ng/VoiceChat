@@ -11,6 +11,7 @@ public class SpeakersThread implements Runnable {
     private BlockingQueue<byte[]> audioQueue;
     OpusDecoderHandler decoder;
     public boolean isRunning;
+    public static float spkLevel = 0;
 
     public SpeakersThread() {
         this.audioQueue = new ArrayBlockingQueue<>(20);
@@ -41,6 +42,7 @@ public class SpeakersThread implements Runnable {
                     byte[] opusBuffer = decoder.decode(buffer);
 
                     AudioDeviceManager.applyVolume(opusBuffer, AudioDeviceManager.spkVolume.getValueAsFloat());
+                    spkLevel = AudioDeviceManager.computeLevel(opusBuffer);
                     AudioDeviceManager.getSpeakers().write(opusBuffer, 0, opusBuffer.length);
                     i++;
                 }
