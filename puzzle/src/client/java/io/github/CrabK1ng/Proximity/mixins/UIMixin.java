@@ -23,14 +23,12 @@ public abstract class UIMixin {
      * <p>Injects into {@link UI#render()} to draw the microphone icon</p>
      * @param ci Callback info for mixin
      */
-
     @Inject(method = "render", at = @At("HEAD"))
     private void drawIcon(CallbackInfo ci) {
-        if (UI.renderUI && VoiceMenu.drawIcon) {
-            //texture loading
-            Texture micOn = GameTexture.load("proximity:mic.png").get();
-            Texture micOff = GameTexture.load("proximity:mic_off.png").get();
+        Texture micOn = GameTexture.load("proximity:mic.png").get();
+        Texture micOff = GameTexture.load("proximity:mic_off.png").get();
 
+        if (UI.renderUI && VoiceMenu.drawIcon) {
             //swapping to correct texture
             Sprite statusIcon = new Sprite(micOn);
             if (!AudioDeviceManager.isMicrophoneOn()) {statusIcon.setTexture(micOff);}

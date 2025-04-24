@@ -47,6 +47,24 @@ public class AudioDeviceManager {
         }
     }
 
+    public static float computeMicLevel(byte[] pcmBytes) {
+        int sampleCount = pcmBytes.length / 2;
+        double sum = 0.0;
+
+        for (int i = 0; i < pcmBytes.length - 1; i += 2) {
+            // Little-endian: LSB first
+            short sample = (short)((pcmBytes[i + 1] << 8) | (pcmBytes[i] & 0xFF));
+            sum += sample * sample;
+        }
+
+        float rms = (float)Math.sqrt(sum / sampleCount);
+        float db = 20f * (float)Math.log10(rms / 32768f + 1e-6f); // dBFS with epsilon
+        db = Math.max(-60f, Math.min(0f, db)); // clamp between -60dB and 0dB
+
+        float normalized = (db + 60f) / 60f; // normalize to 0.0 - 1.0
+        return (float)Math.pow(normalized, 1.5); // perceptual curve
+    }
+
     private static SourceDataLine speakers;
     private static TargetDataLine microphone;
     private static boolean isMicrophoneOn;

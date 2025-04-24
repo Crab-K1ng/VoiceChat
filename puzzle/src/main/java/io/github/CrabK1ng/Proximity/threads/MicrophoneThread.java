@@ -15,6 +15,8 @@ public class MicrophoneThread implements Runnable {
     OpusEncoderHandler encoder;
     public boolean isRunning;
 
+    public static float micLevel = 0;
+
     public MicrophoneThread() {
     }
 
@@ -36,6 +38,7 @@ public class MicrophoneThread implements Runnable {
                 while (i < 10000){
                     AudioDeviceManager.getMicrophone().read(byteBuffer, 0, byteBuffer.length);
                     AudioDeviceManager.applyVolume(byteBuffer, AudioDeviceManager.micVolume.getValueAsFloat());
+                    micLevel = AudioDeviceManager.computeMicLevel(byteBuffer);
 
                     byte[] opusBuffer = encoder.encode(byteBuffer);
                     if (Client.context != null){

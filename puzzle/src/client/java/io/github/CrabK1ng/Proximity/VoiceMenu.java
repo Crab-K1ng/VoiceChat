@@ -2,6 +2,7 @@ package io.github.CrabK1ng.Proximity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -10,6 +11,7 @@ import finalforeach.cosmicreach.TickRunner;
 import finalforeach.cosmicreach.gamestates.GameState;
 import finalforeach.cosmicreach.gamestates.IGameStateInWorld;
 import finalforeach.cosmicreach.lang.Lang;
+import finalforeach.cosmicreach.rendering.GameTexture;
 import finalforeach.cosmicreach.settings.GraphicsSettings;
 import finalforeach.cosmicreach.settings.INumberSetting;
 import finalforeach.cosmicreach.settings.types.IntSetting;
@@ -17,10 +19,14 @@ import finalforeach.cosmicreach.ui.actions.AlignXAction;
 import finalforeach.cosmicreach.ui.actions.AlignYAction;
 import finalforeach.cosmicreach.ui.widgets.CRButton;
 import finalforeach.cosmicreach.ui.widgets.CRSlider;
+import finalforeach.cosmicreach.ui.widgets.ProgressArrowTexture;
+import finalforeach.cosmicreach.util.Orientation2D;
 import io.github.CrabK1ng.Proximity.AudioDevices.AudioDeviceManager;
 import org.lwjgl.opengl.GL20;
 
 import java.text.NumberFormat;
+
+import static io.github.CrabK1ng.Proximity.threads.MicrophoneThread.micLevel;
 
 //import static io.github.CrabK1ng.Proximity.Proximity.lineOpen;
 
@@ -36,18 +42,10 @@ public class VoiceMenu extends GameState implements IGameStateInWorld {
     /**
      * Thanks to pietru
      */
-//    ProgressBar.ProgressBarStyle style = new ProgressBar.ProgressBarStyle();
-//    NinePatch bg9Patch = GameStyles.containerBackground9Patch;
-//    style.background = new NinePatchDrawable(bg9Patch);
-//    style.background.setLeftWidth(0.0F);
-//    style.background.setRightWidth(0.0F);style.background.setBottomHeight(0.0F);
-//    style.background.setTopHeight(0.0F);
-//    style.background.setMinWidth(0.0F);
-//    style.background.setMinHeight(0.0F);
-//    style.knobBefore = new NinePatchDrawable(GameStyles.container9Patch);
 
-//    ProgressBar volumeBar = new ProgressBar(0f, 100f, 1f, true, CustomScreen.) {};
-
+    Texture empty = GameTexture.load("base:textures/ui/progress-arrow-empty.png").get();
+    Texture full = GameTexture.load("base:textures/ui/progress-arrow-full.png").get();
+    ProgressArrowTexture volumeBar = new ProgressArrowTexture(empty,full, Orientation2D.UP);
 
     boolean cursorCaught;
     private final NumberFormat percentFormat = Lang.getPercentFormatter();
@@ -186,9 +184,9 @@ public class VoiceMenu extends GameState implements IGameStateInWorld {
         this.stage.addActor(iconButton);
 
         //volume progress bar
-//        volumeBar.addAction(new AlignXAction(-1, 0.5F));
-//        volumeBar.addAction(new AlignYAction(-1, 0.5F, -100.0F));
-//        this.stage.addActor(volumeBar);
+        volumeBar.addAction(new AlignXAction(-1, 0.5F));
+        volumeBar.addAction(new AlignYAction(-1, 0.5F, -100.0F));
+        this.stage.addActor(volumeBar);
 
         //other stuff
         PerspectiveCamera worldCamera = new PerspectiveCamera(GraphicsSettings.fieldOfView.getValue(), (float) Gdx.graphics.getWidth(), (float) Gdx.graphics.getHeight());
@@ -222,7 +220,8 @@ public class VoiceMenu extends GameState implements IGameStateInWorld {
         Gdx.gl.glBlendFunc(770, 771);
         IN_GAME.render();
         Gdx.gl.glCullFace(1028);
-//        volumeBar.setValue(Proximity.micLevel);
+        volumeBar.setProgress(micLevel);
+        Constants.LOGGER.info("Level: "+micLevel);
         this.stage.draw();
         Gdx.gl.glEnable(2884);
         Gdx.gl.glCullFace(1029);
