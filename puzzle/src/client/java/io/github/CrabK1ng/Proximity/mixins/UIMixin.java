@@ -25,8 +25,8 @@ public abstract class UIMixin {
      */
     @Inject(method = "render", at = @At("HEAD"))
     private void drawIcon(CallbackInfo ci) {
-        Texture micOn = GameTexture.load("proximity:mic.png").get();
-        Texture micOff = GameTexture.load("proximity:mic_off.png").get();
+        Texture micOn = GameTexture.load("proximity:status/mic.png").get();
+        Texture micOff = GameTexture.load("proximity:status/mic_off.png").get();
 
         if (UI.renderUI && VoiceMenu.drawIcon) {
             //swapping to correct texture

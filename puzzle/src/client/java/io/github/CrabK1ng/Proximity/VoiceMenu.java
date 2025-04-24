@@ -43,9 +43,9 @@ public class VoiceMenu extends GameState implements IGameStateInWorld {
      * Thanks to pietru
      */
 
-    Texture empty = GameTexture.load("base:textures/ui/progress-arrow-empty.png").get();
-    Texture full = GameTexture.load("base:textures/ui/progress-arrow-full.png").get();
-    ProgressArrowTexture volumeBar = new ProgressArrowTexture(empty,full, Orientation2D.UP);
+    Texture empty = GameTexture.load("base:textures/ui/empty.png").get();
+    Texture full = GameTexture.load("base:textures/ui/full.png").get();
+    ProgressArrowTexture volumeBar = new ProgressArrowTexture(empty,full, Orientation2D.RIGHT);
 
     boolean cursorCaught;
     private final NumberFormat percentFormat = Lang.getPercentFormatter();
@@ -126,6 +126,12 @@ public class VoiceMenu extends GameState implements IGameStateInWorld {
         closeButton.setSize(275.0F, 35.0F);
         this.stage.addActor(closeButton);
 
+        //volume progress bar
+        volumeBar.addAction(new AlignXAction(1, 0.5F));
+        volumeBar.addAction(new AlignYAction(1, 0.5F, 23.5F));
+        volumeBar.setSize(275.1F, 4.0F);
+        this.stage.addActor(volumeBar);
+
         //mic volume slider
         CRSlider micSlider = this.createSettingsCRSlider(AudioDeviceManager.micVolume, "Mic Volume: ", 0.0F, 2.0F, 0.01F, this.percentFormat);
         micSlider.addAction(new AlignXAction(1, 0.5F));
@@ -183,11 +189,6 @@ public class VoiceMenu extends GameState implements IGameStateInWorld {
         iconButton.setSize(275.0F, 35.0F);
         this.stage.addActor(iconButton);
 
-        //volume progress bar
-        volumeBar.addAction(new AlignXAction(-1, 0.5F));
-        volumeBar.addAction(new AlignYAction(-1, 0.5F, -100.0F));
-        this.stage.addActor(volumeBar);
-
         //other stuff
         PerspectiveCamera worldCamera = new PerspectiveCamera(GraphicsSettings.fieldOfView.getValue(), (float) Gdx.graphics.getWidth(), (float) Gdx.graphics.getHeight());
         worldCamera.near = 0.1F;
@@ -220,8 +221,9 @@ public class VoiceMenu extends GameState implements IGameStateInWorld {
         Gdx.gl.glBlendFunc(770, 771);
         IN_GAME.render();
         Gdx.gl.glCullFace(1028);
-        volumeBar.setProgress(micLevel);
-        Constants.LOGGER.info("Level: "+micLevel);
+        //volumeBar.setProgress(micLevel);
+        volumeBar.setProgress(0.5F);
+        Constants.LOGGER.info("Level: {}", micLevel);
         this.stage.draw();
         Gdx.gl.glEnable(2884);
         Gdx.gl.glCullFace(1029);
