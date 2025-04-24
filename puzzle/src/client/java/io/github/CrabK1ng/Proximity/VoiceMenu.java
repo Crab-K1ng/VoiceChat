@@ -43,8 +43,8 @@ public class VoiceMenu extends GameState implements IGameStateInWorld {
      * Thanks to pietru
      */
 
-    Texture empty = GameTexture.load("base:textures/ui/empty.png").get();
-    Texture full = GameTexture.load("base:textures/ui/full.png").get();
+    Texture empty = GameTexture.load("proximity:ui/empty.png").get();
+    Texture full = GameTexture.load("proximity:ui/full.png").get();
     ProgressArrowTexture volumeBar = new ProgressArrowTexture(empty,full, Orientation2D.RIGHT);
 
     boolean cursorCaught;
@@ -129,7 +129,7 @@ public class VoiceMenu extends GameState implements IGameStateInWorld {
         //volume progress bar
         volumeBar.addAction(new AlignXAction(1, 0.5F));
         volumeBar.addAction(new AlignYAction(1, 0.5F, 23.5F));
-        volumeBar.setSize(275.1F, 4.0F);
+        volumeBar.setSize(275F, 3.0F);
         this.stage.addActor(volumeBar);
 
         //mic volume slider
@@ -221,8 +221,7 @@ public class VoiceMenu extends GameState implements IGameStateInWorld {
         Gdx.gl.glBlendFunc(770, 771);
         IN_GAME.render();
         Gdx.gl.glCullFace(1028);
-        //volumeBar.setProgress(micLevel);
-        volumeBar.setProgress(0.5F);
+        volumeBar.setProgress(micLevel);
         Constants.LOGGER.info("Level: {}", micLevel);
         this.stage.draw();
         Gdx.gl.glEnable(2884);
