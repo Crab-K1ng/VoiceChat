@@ -3,7 +3,7 @@ package io.github.CrabK1ng.Proximity.audioFormat;
 public class AudioFormat {
 
     private static javax.sound.sampled.AudioFormat.Encoding encoding = javax.sound.sampled.AudioFormat.Encoding.PCM_SIGNED;
-    private static int sampleRate = 8000; //48000
+    private static int sampleRate = 48000; //8000
     private static int sampleSizeInBits = 16;
     private static int channels = 2; // Mono (1) or Stereo (2)
     private static int frameRate = sampleRate;
@@ -21,7 +21,15 @@ public class AudioFormat {
         int bytesPerSample = sampleSizeInBits / 8;
         bytesPerFrame = bytesPerSample * channels;
 
-        format = new javax.sound.sampled.AudioFormat(javax.sound.sampled.AudioFormat.Encoding.PCM_SIGNED, 48000, 16, 1, 2, 48000, false);
+        format = new javax.sound.sampled.AudioFormat(
+                encoding,
+                sampleRate,
+                sampleSizeInBits,
+                channels,
+                bytesPerFrame,
+                frameRate,
+                bigEndian
+        );
     }
 
     public static javax.sound.sampled.AudioFormat.Encoding getEncoding() {
