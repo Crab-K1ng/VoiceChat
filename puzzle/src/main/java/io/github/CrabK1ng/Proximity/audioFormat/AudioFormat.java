@@ -5,7 +5,7 @@ public class AudioFormat {
     private static javax.sound.sampled.AudioFormat.Encoding encoding = javax.sound.sampled.AudioFormat.Encoding.PCM_SIGNED;
     private static int sampleRate = 48000; //8000
     private static int sampleSizeInBits = 16;
-    private static int channels = 2; // Mono (1) or Stereo (2)
+    private static int channels = 1; // Mono (1) or Stereo (2)
     private static int frameRate = sampleRate;
     private static boolean bigEndian = false;
 

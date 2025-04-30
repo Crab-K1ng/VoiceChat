@@ -155,6 +155,7 @@ public class VoiceMenu extends GameState implements IGameStateInWorld {
 
         //mic button
         CRButton micButton = new CRButton() {
+
             public void onClick() {
                 super.onClick();
                 AudioDeviceManager.toggleMic();
@@ -166,9 +167,9 @@ public class VoiceMenu extends GameState implements IGameStateInWorld {
                 this.setText(string + ((AudioDeviceManager.isMicrophoneOn()) ? VoiceMenu.this.on : VoiceMenu.this.off));
             }
         };
+        String string = "Mic: "/*Lang.get("difficultyButton")*/;
+        micButton.setText(string + ((AudioDeviceManager.isMicrophoneOn()) ? VoiceMenu.this.on : VoiceMenu.this.off));
 
-        micButton.onClick();
-        micButton.onClick();  //update text
 
         micButton.addAction(new AlignXAction(1, 0.5F));
         micButton.addAction(new AlignYAction(1, 0.5F, -60.0F));
